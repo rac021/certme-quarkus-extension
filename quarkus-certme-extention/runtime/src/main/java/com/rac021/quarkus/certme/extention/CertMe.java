@@ -44,6 +44,8 @@ import org.shredzone.acme4j.util.CSRBuilder ;
 import io.undertow.server.HttpServerExchange ;
 import org.shredzone.acme4j.util.KeyPairUtils ;
 import org.shredzone.acme4j.challenge.Challenge ;
+import io.quarkus.runtime.annotations.ConfigRoot ;
+import io.quarkus.runtime.annotations.ConfigPhase ;
 import java.nio.file.attribute.PosixFilePermission ;
 import org.shredzone.acme4j.exception.AcmeException ;
 import org.shredzone.acme4j.challenge.Dns01Challenge ;
@@ -57,6 +59,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider ;
  */
 
 @Singleton
+@ConfigRoot(name = "certme", phase = ConfigPhase.RUN_TIME)
 public class CertMe {
     
     /** File name of the User Key Pair.      */
@@ -92,14 +95,17 @@ public class CertMe {
 
     public CertMe() throws Exception {
         
-        CertMe.main( "-domain" , "localhost" ,
-                      "-password_pkcs12", "123456789",
-                      "-password_jks", "123456789",
-                      "-outCertificate", "./cert.jks",
-                      "-staging", "dev",
-                      "-jks", 
-                      "-interface", "0.0.0.0",
-                      "-port", "80" ) ;
+	String property = System.getProperty( "quarkus.certme.letsencryt" ) ;
+        System.out.println( " LetsEncryp Property = " +  property         ) ;
+	    
+        CertMe.main( "-domain"           ,  "localhost"  ,
+                      "-password_pkcs12" ,  "123456789"  ,
+                      "-password_jks"    ,  "123456789"  ,
+                      "-outCertificate"  ,  "./cert.jks" ,
+                      "-interface"       ,  "0.0.0.0"    ,
+                      "-port"            ,  "80"         ,
+                      "-staging"         ,  "dev"        ,
+                      "-jks"             )               ;
     }
     
     private static void startServer( String interfce , int port, Http01Challenge challenge ) throws InterruptedException {
@@ -908,7 +914,7 @@ public class CertMe {
                     + "MUST BE  ( 80 )      " ) ;
         }
         
-        resolveChallengeAndFetchCert( domain ,  port, interfce )      ;
+        resolveChallengeAndFetchCert( domain ,  port, interfce ) ;
         
         convAndRegisterP12Cert( outCertificate , 
                                 passwordPkcs12 , 
