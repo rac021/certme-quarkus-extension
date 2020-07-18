@@ -739,7 +739,7 @@ public class CertMe {
       System.out.println(" *** CertMe Args :                                                                                               " ) ;
       System.out.println("                                                                                                                 " ) ;
       System.out.println("      -domain          =  your_domain ( if not provided, it will be automatically Resolved )                     " ) ;
-      System.out.println("      -out             =  Directory output certificate. Default : letsEndcrypt_Cert                              " ) ;
+      System.out.println("      -out             =  Directory output certificate. Default : letsEncrypt_Cert                               " ) ;
       System.out.println("      -password_pkcs12 =  password of the PKCS12 File. If Not Provived, it will be Generated using UUID          " ) ;
       System.out.println("      -jks             =  Import PKS12 into JKS  ( Java KeyStore ), ( Boolean. Disabled by default )             " ) ;
       System.out.println("      -password_jks    =  password of the JKS File ( if not provided, it will be the same as -password_pkcs12 )  " ) ;
