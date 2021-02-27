@@ -3,9 +3,9 @@
 ```bash
 
     cd ../quarkus-certme-extention/         ; \
-    mvn clean install                       ; \
+    sudo mvn clean install                  ; \
     cd ../certme/                           ; \
-    mvn clean install                       ; \
+    sudo mvn clean package                  ; \
     java -jar target/certme-my-1.0-runner.jar
 
 ```
