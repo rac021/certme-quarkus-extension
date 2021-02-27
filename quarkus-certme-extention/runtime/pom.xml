@@ -1,110 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" 
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
         <groupId>com.rac021</groupId>
-        <artifactId>quarkus-certme-extention-parent</artifactId>
+        <artifactId>certme-extension-parent</artifactId>
         <version>1.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
-
-    <artifactId>quarkus-certme-extention</artifactId>
-    <name>CertMe Lets Encrypt Extension - Runtime</name>
-
+    
+    <artifactId>certme-extension</artifactId>
+    <name>Certme Extension - Runtime</name>
+    
     <dependencies>
         
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-arc-deployment</artifactId>
-        </dependency>
-
-
-        <!-- ACME -->
-        <dependency>
-            <groupId>org.shredzone.acme4j</groupId>
-            <artifactId>acme4j-client</artifactId>
-            <version>2.9</version>
+            <artifactId>quarkus-vertx-core-deployment</artifactId>
         </dependency>
         
         <dependency>
             <groupId>org.shredzone.acme4j</groupId>
             <artifactId>acme4j-utils</artifactId>
-            <version>2.9</version>
+            <version>2.11</version>
         </dependency>
       
-<!--        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.6</version>
-        </dependency>-->
-
-        <!-- Embeded Sever -->        
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-core</artifactId>
-            <version>2.1.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-servlet</artifactId>
-            <version>2.1.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-websockets-jsr</artifactId>
-            <version>2.1.1.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.13.3</version>
-        </dependency>
-        
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.13.3</version>
+            <version>2.14.0</version>
         </dependency>
-
-        <!-- SLF4J Bridge -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.13.3</version>
-        </dependency>
-       
+        
     </dependencies>
-
+    
     <build>
+        
         <plugins>
+            
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-bootstrap-maven-plugin</artifactId>
                 <version>${quarkus.version}</version>
                 <executions>
                     <execution>
+                        <phase>compile</phase>
                         <goals>
                             <goal>extension-descriptor</goal>
                         </goals>
-                        <phase>compile</phase>
                         <configuration>
-                            <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}
-                            </deployment>
+                            <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <annotationProcessorPaths>
@@ -116,6 +68,9 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            
         </plugins>
+        
     </build>
+    
 </project>
