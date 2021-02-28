@@ -302,17 +302,17 @@ public class CertMeBuildTime {
             throw new RuntimeException("Exeption when generating Certificate") ;
         }
         
-        LOG.info("Success! The certificate for domain [[ " + domain + " ]] Has Been Generated :-) ") ;
-        LOG.info("Certificate URL : " + certificate.getLocation())                                   ;
+        LOG.info("Success ! The certificate for domain [[ " + domain + " ]] Has Been Generated :-) ") ;
+        LOG.info("Certificate URL : " + certificate.getLocation())                                    ;
 
         /** Write a combined file containing the certificate and chain. */
-        try ( FileWriter fw = new FileWriter(  DOMAIN_CHAIN_FILE ) ) {
+        try ( FileWriter fw = new FileWriter (  DOMAIN_CHAIN_FILE ) ) {
             certificate.writeCertificate(fw) ;
         }
         
-        if ( server != null ) server.stop() ;
+        if ( server != null ) server.stop()  ;
         
-        authorizeAccessToAllCert()          ;
+        authorizeAccessToAllCert()           ;
     }
     
     /**
