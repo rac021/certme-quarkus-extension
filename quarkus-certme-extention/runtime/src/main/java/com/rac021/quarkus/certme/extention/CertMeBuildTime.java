@@ -534,7 +534,7 @@ public class CertMeBuildTime {
 
         /** LOG.info("If you're ready, dismiss the dialog...") ; . */
 
-        StringBuilder message = new StringBuilder()       ;
+        StringBuilder message = new StringBuilder(1024)   ;
         message.append("Please create a TXT record:\n\n") ;
         message.append("_acme-challenge.")
                .append(auth.getIdentifier()
@@ -546,12 +546,12 @@ public class CertMeBuildTime {
         return challenge ;
     }
     
-    private  static void authorizeAccessToAllCert() throws IOException          {
+    private  static void authorizeAccessToAllCert() throws IOException        {
         
         List<String> files = Arrays.asList( USER_KEY_FILE.getAbsolutePath()   ,
                                             DOMAIN_KEY_FILE.getAbsolutePath() ,
                                             DOMAIN_CSR_FILE.getAbsolutePath() ,
-                                            DOMAIN_CHAIN_FILE.getAbsolutePath() ) ;       
+                                            DOMAIN_CHAIN_FILE.getAbsolutePath() ) ;
           
         //Setting file permissions for owner, group and others using PosixFilePermission
           
