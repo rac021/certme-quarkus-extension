@@ -9,3 +9,6 @@
     java -jar target/certme-1.0-runner.jar
 
 ```
+
+#### Improvements
+  - Embed Generated Let's Encrypt certificate at buildTime
