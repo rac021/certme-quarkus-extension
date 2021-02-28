@@ -12,3 +12,4 @@
 
 #### Improvements
   - Embed Generated Let's Encrypt certificate at buildTime
+  - Add support of dns-01 challenge
