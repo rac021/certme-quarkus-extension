@@ -39,8 +39,8 @@ import org.shredzone.acme4j.AccountBuilder ;
 import org.shredzone.acme4j.util.CSRBuilder ;
 import org.shredzone.acme4j.util.KeyPairUtils ;
 import org.shredzone.acme4j.challenge.Challenge ;
+import io.quarkus.runtime.annotations.ConfigRoot ;
 import io.quarkus.runtime.annotations.ConfigPhase ;
-import io.quarkus.runtime.annotations.ConfigRoot;
 import java.nio.file.attribute.PosixFilePermission ;
 import org.shredzone.acme4j.exception.AcmeException ;
 import org.shredzone.acme4j.challenge.Dns01Challenge ;
@@ -54,8 +54,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider ;
  */
 
 @Singleton
-@ConfigRoot(name = "certme", phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
-public class CertMe {
+@ConfigRoot( name = "certme", phase = ConfigPhase.BUILD_TIME )
+public class CertMeBuildTime {
     
     /** File name of the User Key Pair.      */
     private static  File USER_KEY_FILE        ;
@@ -75,23 +75,27 @@ public class CertMe {
     private static String   STAGING   = "DEV" ;
 
     private enum ChallengeType {  HTTP, DNS   }
-  
        
     /** Challenge type to be used. */
     private static final ChallengeType CHALLENGE_TYPE = ChallengeType.HTTP   ;
   
-    private static final Logger LOG = LogManager.getLogger( CertMe.class.getName() ) ;
+    private static final Logger LOG = LogManager.getLogger(CertMeBuildTime.class.getName() ) ;
  
-    private static VertxServer server       ;
+    private static VertxServer server         ;
  
-    private static boolean forceGen = false ;
+    private static boolean forceGen = false   ;
     
-    public CertMe() throws Exception    {
-	
-       Level level = checkLog( "INFO"   )                         ;
+    public CertMeBuildTime() throws Exception {
+        
+       Level level = CertMeLogger.checkLog( "INFO"  )             ;
        Configurator.setRootLevel( level )                         ;
        Configurator.setAllLevels( "certMe_configuration", level ) ;
        
+       genCertificates()   ;
+    }
+    
+    public static void genCertificates() throws Exception {
+
        String domain                 = System.getProperty("certme_domain")      ;
        String outCertificateFolder   = System.getProperty("certme_out_folder")  ;
        String outCertificateFileName = System.getProperty("certme_file_name")   ;
@@ -106,12 +110,9 @@ public class CertMe {
 
        if( domain == null || domain.trim().isEmpty() ) domain = getDomain() ;
        
-       if( outCertificateFileName == null || outCertificateFileName.trim().isEmpty() ) 
-           outCertificateFileName = "app"  ;
-        
-       if( Interface == null || Interface.trim().isEmpty()) Interface = "0.0.0.0"    ;
+       if( Interface == null || Interface.trim().isEmpty()) Interface = "0.0.0.0"       ;
        
-       if(  staging != null          && 
+       if(   staging != null          && 
            ! staging.trim().isEmpty() && 
              staging.trim().equalsIgnoreCase( "PROD")) { STAGING = "PROD" ; }
        
@@ -121,6 +122,9 @@ public class CertMe {
  
        String dir = System.getProperty("user.dir")          ;
 
+       if( outCertificateFileName == null || outCertificateFileName.trim().isEmpty() ) 
+           outCertificateFileName = "app"  ;
+      
        if (outCertificateFolder == null || outCertificateFolder.trim().isEmpty()   )
            outCertificateFolder = dir + File.separator + "certMe" + File.separator ;
         
@@ -140,19 +144,16 @@ public class CertMe {
            new File( outCertificateFolder + outCertificateFileName + "_domain.key").exists()       &&
            ! forceGen ) {
             
-           LOG.info("Certme Certificate Already Exists.. "                                        ) ;
+             LOG.info("Certme Certificate Already Exists.. " ) ;
            
-           LOG.info( " => Domain-chain  : " + outCertificateFolder + outCertificateFileName + "_domain-chain.crt" ) ;
-           LOG.info( " => Domain-ckey   : " + outCertificateFolder + outCertificateFileName + "_domain.key"       ) ;
+             LOG.info( " => Domain-chain  : " + outCertificateFolder + outCertificateFileName + "_domain-chain.crt" ) ;
+             LOG.info( " => Domain-ckey   : " + outCertificateFolder + outCertificateFileName + "_domain.key"       ) ;
+             LOG.info( " ++ They will be used at Runtime ! "                                                        ) ;
            
-           System.setProperty( "quarkus.http.ssl.certificate.file"   , 
-                               outCertificateFolder + outCertificateFileName + "_domain-chain.crt") ;
-           System.setProperty( "quarkus.http.ssl.certificate.key-file",
-                               outCertificateFolder + outCertificateFileName + "_domain.key"      ) ;
-           return ; 
+             return ; 
        }
        
-       CertMe.run( domain, outCertificateFolder, outCertificateFileName, portNum, Interface ) ;
+       CertMeBuildTime.run( domain, outCertificateFolder, outCertificateFileName, portNum, Interface ) ;
     }
     
     private static void run( String  domain                    , 
@@ -633,16 +634,5 @@ public class CertMe {
             throw  ex          ;
         }
     }    
-    
-    private static Level checkLog( String level )           {
-
-       Level toLevel = Level.toLevel( level.toUpperCase() ) ;
-       System.out.println( "\nRetained LOG LEVEL : "        + 
-                           toLevel.name()                 ) ;
-       return toLevel                                       ;
-    }
 
 }
-
-
-            
