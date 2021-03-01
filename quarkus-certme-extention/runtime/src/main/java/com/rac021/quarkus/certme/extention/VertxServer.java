@@ -63,6 +63,7 @@ public class VertxServer  {
         isStarted = false                    ;
         vertx.close()                        ;
    }
- }
+    
+  }
      
 }
