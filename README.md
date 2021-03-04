@@ -11,7 +11,7 @@
     cd ../certme/                  ; \
     sudo mvn clean package 
 ```
-1 Runing Tests ( By Default, the tests aree skiped ! )
+1.1 Build Step With Tests ( By Default, the tests aree skiped ! )
 
 ```bash
 
