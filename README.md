@@ -31,7 +31,7 @@
    -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. Default : FALSE
 ```
 
-4. Build Step With Tests ( By Default, the tests aree skiped ! )
+4. Build Step With Tests ( By Default, the tests are skiped ! )
 
 ```bash
 
