@@ -54,11 +54,13 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider ;
  */
 
 @Singleton
-@ConfigRoot( name = "certme", phase = ConfigPhase.BUILD_TIME )
+@ConfigRoot( name = "certme" , phase = ConfigPhase.BUILD_TIME )
 public class CertMeBuildTime {
     
     /** File name of the User Key Pair.      */
     private static  File USER_KEY_FILE        ;
+    
+    private static  File USER_KEY_FILE_COPY   ;
 
     /** File name of the Domain Key Pair.    */
     private static  File DOMAIN_KEY_FILE      ;
@@ -81,21 +83,32 @@ public class CertMeBuildTime {
   
     private static final Logger LOG = LogManager.getLogger(CertMeBuildTime.class.getName() ) ;
  
-    private static VertxServer server         ;
- 
-    private static boolean forceGen = false   ;
+    private static boolean      forceGen  = false ;
     
-    public CertMeBuildTime() throws Exception {
-        
-       Level level = CertMeLogger.checkLog( "INFO"  )             ;
-       Configurator.setRootLevel( level )                         ;
-       Configurator.setAllLevels( "certMe_configuration", level ) ;
+    private static Exception    exception = null  ;
+    
+    private static VertxServer  server    = null  ;
+            
+    public CertMeBuildTime() throws Exception     {
        
        genCertificates()   ;
     }
     
-    public static void genCertificates() throws Exception {
+    public static void genCertificates() throws Exception    {
 
+       configLogger()                                        ;
+       
+       exception       = null                                ;
+       
+       String ignore   = System.getProperty("certme_ignore") ;
+       
+       if( ignore != null && ! ignore.trim().isEmpty()   )   {
+           
+           LOG.info( "\nCertMe Let's Encrypt Certificate "   +
+                     "Generation IGNORED \n" )               ;
+           return                                            ;
+       }
+       
        String domain                 = System.getProperty("certme_domain")      ;
        String outCertificateFolder   = System.getProperty("certme_out_folder")  ;
        String outCertificateFileName = System.getProperty("certme_file_name")   ;
@@ -104,11 +117,11 @@ public class CertMeBuildTime {
        String staging                = System.getProperty("certme_staging")     ;
        String forceGenStr            = System.getProperty("certme_force_gen")   ;
 
-       Integer portNum = 80 ;
+       Integer portNum               = 80                                       ;
        
        if( port != null && ! port.trim().isEmpty() ) portNum = Integer.parseInt( port ) ;
 
-       if( domain == null || domain.trim().isEmpty() ) domain = getDomain() ;
+       if( domain == null || domain.trim().isEmpty() ) domain = getDomain()             ;
        
        if( Interface == null || Interface.trim().isEmpty()) Interface = "0.0.0.0"       ;
        
@@ -120,7 +133,7 @@ public class CertMeBuildTime {
        
        String jVersion = System.getProperty("java.version") ;
  
-       String dir = System.getProperty("user.dir")          ;
+       String dir      = System.getProperty("user.dir")     ;
 
        if( outCertificateFileName == null || outCertificateFileName.trim().isEmpty() ) 
            outCertificateFileName = "app"  ;
@@ -128,6 +141,10 @@ public class CertMeBuildTime {
        if (outCertificateFolder == null || outCertificateFolder.trim().isEmpty()   )
            outCertificateFolder = dir + File.separator + "certMe" + File.separator ;
         
+       if ( ! outCertificateFolder.trim().endsWith( File.separator ) ) {
+              outCertificateFolder += File.separator ;
+       }
+       
        FileUtils.deleteQuietly( new File(outCertificateFolder) ) ;
        FileUtils.forceMkdir(    new File(outCertificateFolder) ) ;
        
@@ -144,7 +161,7 @@ public class CertMeBuildTime {
            new File( outCertificateFolder + outCertificateFileName + "_domain.key").exists()       &&
            ! forceGen ) {
             
-             LOG.info("Certme Certificate Already Exists.. " ) ;
+             LOG.info("Certme Certificate Already Exists.. " )       ;
            
              LOG.info( " => Domain-chain  : " + outCertificateFolder + outCertificateFileName + "_domain-chain.crt" ) ;
              LOG.info( " => Domain-ckey   : " + outCertificateFolder + outCertificateFileName + "_domain.key"       ) ;
@@ -153,19 +170,38 @@ public class CertMeBuildTime {
              return ; 
        }
        
-       CertMeBuildTime.run( domain, outCertificateFolder, outCertificateFileName, portNum, Interface ) ;
+       try {
+           
+           System.setProperty("quarkus.http.ssl.certificate.file"     ,   "" ) ;
+           System.setProperty("quarkus.http.ssl.certificate.key-file" ,   "" ) ;
+           
+           CertMeBuildTime.run( domain, outCertificateFolder, outCertificateFileName, portNum, Interface ) ;
+
+       } catch ( Exception ex ) {
+           
+           exception    = ex                                                    ;
+
+           if ( server != null  ) server.stop()                                 ;
+            
+            LOG.error( "\n" )                                                   ;
+            LOG.error( "Certme Failed to get a certificate for the domain [[ "  + 
+                       domain + " ]] \n " +  ex.getMessage() + "\n"           ) ;
+            
+            FileUtils.deleteQuietly( new File(outCertificateFolder )          ) ;
+
+       }
     }
     
-    private static void run( String  domain                    , 
-                             String  outCertificateFolder      ,
-                             String  outCertificateFileName    ,
-                             Integer port                      , 
+    private static void run( String  domain                       , 
+                             String  outCertificateFolder         ,
+                             String  outCertificateFileName       ,
+                             Integer port                         , 
                              String  Interface ) throws Exception {
 
-        /** File name of the User Key Pair. */
+        /** File name of the User Key Pair.      */
         USER_KEY_FILE = new File( outCertificateFolder     + outCertificateFileName  + "_user.key"  )       ;
 
-        /** File name of the Domain Key Pair. */
+        /** File name of the Domain Key Pair.    */
         DOMAIN_KEY_FILE = new File( outCertificateFolder   + outCertificateFileName  + "_domain.key")       ;
 
         /** File name of the CSR. */
@@ -174,14 +210,18 @@ public class CertMeBuildTime {
         /** File name of the signed certificate. */
         DOMAIN_CHAIN_FILE = new File( outCertificateFolder + outCertificateFileName  + "_domain-chain.crt") ;
         
+        /** File name of the User Key Pair. COPY **/
+        USER_KEY_FILE_COPY = new File(  System.getProperty("user.dir")  + File.separator  +
+                                        "." + outCertificateFileName    + "_user.key"  )  ;
+
         try {
                 
-            LOG.info("Starting up... ")                               ;
+            LOG.info("Starting up... " )                                ;
 
-            resolveChallengeAndFetchCert( domain , port , Interface ) ;
+            resolveChallengeAndFetchCert( domain , port , Interface )   ;
             
             if( new File( outCertificateFolder + outCertificateFileName + "_domain-chain.crt").exists() && 
-                new File( outCertificateFolder + outCertificateFileName + "_domain.key").exists()   )  {
+                new File( outCertificateFolder + outCertificateFileName + "_domain.key").exists()   )     {
 
                 LOG.info("Certme Cert Generation Success ! " )                                            ;
                 System.getProperty("quarkus.http.ssl.certificate.file"    , 
@@ -194,21 +234,10 @@ public class CertMeBuildTime {
                  System.setProperty("quarkus.http.ssl.certificate.key-file" , "" ) ;
                  LOG.warn("Certme Failed Cert Generation ! "                     ) ;
             }
+ 
+       } catch ( Exception ex ) {
             
-        } catch ( Exception ex ) {
-            
-            if ( server != null ) server.stop()                                 ;
-            
-            LOG.error( " " )                                                    ;
-            LOG.error( "Certme Failed to get a certificate for the domain [[ "  + 
-                       domain + " ]] \n ", ex                                 ) ;
-            
-            System.out.println( "" )                                            ;
-            
-            FileUtils.deleteQuietly( new File(outCertificateFolder )          ) ;
-            
-            System.setProperty("quarkus.http.ssl.certificate.file"     ,   "" ) ;
-            System.setProperty("quarkus.http.ssl.certificate.key-file" ,   "" ) ;
+            throw ex ;
         }
     }
    
@@ -224,6 +253,7 @@ public class CertMeBuildTime {
      */
     private static void fetchCertificate( String domain , int port, String interfce ) throws Exception {
         
+        LOG.info( "Fetch Certificates.... " )             ; 
         /** Load the user key file. If there is no key file, create a new one. */
         KeyPair userKeyPair = loadOrCreateUserKeyPair()    ;
 
@@ -325,8 +355,15 @@ public class CertMeBuildTime {
      * @return User's {@link KeyPair}.
      */
     private static KeyPair loadOrCreateUserKeyPair( ) throws IOException {
+
+        if ( (USER_KEY_FILE_COPY).exists() )                      {
+           LOG.info( "KEY_USER Already Exists. Path : "           + 
+                      USER_KEY_FILE_COPY.getAbsolutePath() )      ;
+           
+           FileUtils.copyFile(USER_KEY_FILE_COPY, USER_KEY_FILE ) ;
+        }
         
-        if ( (USER_KEY_FILE).exists())                            {
+        if ( (USER_KEY_FILE).exists() )                           {
             /** If there is a key file, read it. */
             try (FileReader fr = new FileReader(USER_KEY_FILE))   {
                 return KeyPairUtils.readKeyPair(fr) ;
@@ -338,6 +375,9 @@ public class CertMeBuildTime {
             try (FileWriter fw = new FileWriter(USER_KEY_FILE))        {
                  KeyPairUtils.writeKeyPair(userKeyPair, fw)            ;
             }
+          
+            FileUtils.copyFile( USER_KEY_FILE , USER_KEY_FILE_COPY )   ;
+            
             return userKeyPair ;
         }
     }
@@ -350,14 +390,15 @@ public class CertMeBuildTime {
      * @return Domain {@link KeyPair}.
      */
     private static KeyPair loadOrCreateDomainKeyPair() throws IOException {
+        
         if (DOMAIN_KEY_FILE.exists()) {
-            try (FileReader fr = new FileReader(DOMAIN_KEY_FILE))  {
+            try (FileReader fr = new FileReader(DOMAIN_KEY_FILE))         {
                 return KeyPairUtils.readKeyPair(fr) ;
             }
         } else {
-            KeyPair domainKeyPair = KeyPairUtils.createKeyPair(KEY_SIZE) ;
-            try (FileWriter fw = new FileWriter(DOMAIN_KEY_FILE))        {
-                KeyPairUtils.writeKeyPair(domainKeyPair, fw)             ;
+            KeyPair domainKeyPair = KeyPairUtils.createKeyPair(KEY_SIZE)  ;
+            try (FileWriter fw = new FileWriter(DOMAIN_KEY_FILE))         {
+                KeyPairUtils.writeKeyPair(domainKeyPair, fw)              ;
             }
             return domainKeyPair ;
         }
@@ -385,9 +426,9 @@ public class CertMeBuildTime {
         } .  */
 
         Account account = new AccountBuilder().agreeToTermsOfService()
-                                              .useKeyPair(accountKey)
-                                              .create(session)      ;
-        
+                                              .useKeyPair(accountKey )
+                                              .create( session )     ;
+
         LOG.info("Registered a new user, URL : " + account.getLocation()) ;
 
         return account ;
@@ -414,10 +455,22 @@ public class CertMeBuildTime {
         switch ( CHALLENGE_TYPE )  {
             
             case HTTP :
-                challenge = httpChallenge(auth )                         ;
-                server = new VertxServer( interfce , 
-                                          port     , 
-                                         ( Http01Challenge ) challenge ) ;
+                challenge = httpChallenge(auth )             ;
+                try {
+                       server = new VertxServer( interfce    , 
+                                                 port        , 
+                                                 ( Http01Challenge ) challenge ) ;
+                       TimeUnit.SECONDS.sleep( 1 )           ;
+                       if ( ! server.isStarted() )           {
+                           TimeUnit.SECONDS.sleep( 2 )       ; 
+                           if( server.getException() != null ) {
+                               throw new RuntimeException( server.getException()
+                                                                 .getMessage() ) ;
+                           }
+                       }
+                } catch ( InterruptedException | RuntimeException ex   ) {
+                    throw new RuntimeException(ex )                      ;
+                }
                 break                                                    ;
 
             case DNS :
@@ -441,12 +494,12 @@ public class CertMeBuildTime {
         /** Poll for the challenge to complete. */
         try {
             int attempts = 15 ;
-            while (challenge.getStatus() != Status.VALID && attempts-- > 0  ) {
+            while (challenge.getStatus() != Status.VALID && attempts-- > 0  )  {
                 /** Did the authorization fail? . */
-                if (challenge.getStatus() == Status.INVALID)                  {
-                    LOG.error( "x-> " + challenge.getError().toString()     ) ;
-                    // server.stop()                                          ;
-                    throw new AcmeException("Challenge failed... Giving up.") ;
+                if (challenge.getStatus() == Status.INVALID)                   {
+                   LOG.error( "x-> " + challenge.getError().toString()     )   ;
+                   throw new AcmeException("Challenge failed ( Giving up ) : " + 
+                                           challenge.getError().toString() )   ;
                 }
 
                 /** Wait for a few seconds. */
@@ -518,7 +571,7 @@ public class CertMeBuildTime {
      * @throws org.shredzone.acme4j.exception.AcmeException
      */
     
-    public static Challenge dnsChallenge(Authorization auth) throws AcmeException   {
+    private static Challenge dnsChallenge(Authorization auth) throws AcmeException {
         
         /** Find a single dns-01 challenge. */
         Dns01Challenge challenge = auth.findChallenge(Dns01Challenge.TYPE)   ;
@@ -546,12 +599,13 @@ public class CertMeBuildTime {
         return challenge ;
     }
     
-    private  static void authorizeAccessToAllCert() throws IOException        {
+    private  static void authorizeAccessToAllCert() throws IOException           {
         
-        List<String> files = Arrays.asList( USER_KEY_FILE.getAbsolutePath()   ,
-                                            DOMAIN_KEY_FILE.getAbsolutePath() ,
-                                            DOMAIN_CSR_FILE.getAbsolutePath() ,
-                                            DOMAIN_CHAIN_FILE.getAbsolutePath() ) ;
+        List<String> files = Arrays.asList( USER_KEY_FILE.getAbsolutePath()      ,
+                                            USER_KEY_FILE_COPY.getAbsolutePath() ,
+                                            DOMAIN_KEY_FILE.getAbsolutePath()    ,
+                                            DOMAIN_CSR_FILE.getAbsolutePath()    ,
+                                            DOMAIN_CHAIN_FILE.getAbsolutePath()  ) ;
           
         //Setting file permissions for owner, group and others using PosixFilePermission
           
@@ -597,7 +651,7 @@ public class CertMeBuildTime {
      * @param port
      * @param interfce
      */
-    public static void resolveChallengeAndFetchCert( String domain, int port , String interfce ) {
+    private static void resolveChallengeAndFetchCert( String domain, int port , String interfce ) {
     
         Security.addProvider(new BouncyCastleProvider())  ;
         
@@ -605,7 +659,7 @@ public class CertMeBuildTime {
              
             fetchCertificate( domain , port , interfce ) ;
             
-        } catch (Exception ex)  {
+        } catch (Exception ex)           {
             throw new RuntimeException(ex)               ;
         }
     }
@@ -614,9 +668,9 @@ public class CertMeBuildTime {
      * @return String
      * @throws java.lang.Exception
     */
-    public static String getDomain() throws Exception {
+    public static String getDomain() throws Exception  {
 
-        try (final Socket socket = new Socket())      {
+        try (final Socket socket = new Socket())       {
             
             socket.connect(new InetSocketAddress("google.com", 80 )) ;
             
@@ -633,6 +687,16 @@ public class CertMeBuildTime {
         } catch (Exception ex) {
             throw  ex          ;
         }
-    }    
+    }
 
+    public static Exception getException() {
+        return exception ;
+    }
+    
+    private static void configLogger()     {
+       
+        Level level = CertMeLogger.checkLog( "INFO"  )             ;
+        Configurator.setRootLevel( level   )                       ;
+        Configurator.setAllLevels( "certMe_configuration", level ) ;
+    }
 }

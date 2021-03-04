@@ -43,15 +43,22 @@ public class CertMeRuntime {
        if (outCertificateFolder == null || outCertificateFolder.trim().isEmpty() ) {
            outCertificateFolder = dir + File.separator + "certMe" + File.separator ;
        }
-           
+       if ( ! outCertificateFolder.trim().endsWith( File.separator ) ) {
+              outCertificateFolder += File.separator ;
+       }
+       
        if ( System.getProperty("certme_force_gen") != null ) {
        
            // Force to Gen Certificates at Runtime
            // Because the Let's Encrypt http challenge must be resolved on the port 80
            // You have to be root in order to be able to start server on this port
            
-           CertMeBuildTime.genCertificates() ;
+           LOG.info( "Force Let's Encrypt Certificate Generation ENABLE ! "  ) ;
+           CertMeBuildTime.genCertificates()                                   ;
        
+       } else {
+           
+           LOG.info( "Force Let's Encrypt Certificate Generation DISABLE ! " ) ;
        } 
        
        LOG.info( "Check for existing certificates in the folder : " + outCertificateFolder )       ;
