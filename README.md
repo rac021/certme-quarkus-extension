@@ -21,14 +21,14 @@
 3. **Supported Arguments :**
 
 ```
-   -Dcertme_domain     : specify the domain. Default : Try to Resolve the Current Domain
-   -Dcertme_interface  : Interface.          Default : 0.0.0.0
-   -Dcertme_port       : Http Port Server.   Default : 80
-   -Dcertme_staging    : DEV / PROD.         Default : DEV
-   -Dcertme_force_gen  : if TRUE, it generate the certificate even it exists. Default : false 
-   -Dcertme_out_folder : Where the Certificates are generated. Default folder : certMe
-   -Dcertme_file_name  : Certificate Name.   Default : app ( followed by _domain-chain.crt )
-   -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. Default : FALSE
+   -Dcertme_domain     : specify the domain. DEFAULT : Try to Resolve the Current Domain
+   -Dcertme_interface  : Interface.          DEFAULT : 0.0.0.0
+   -Dcertme_port       : Http Port Server.   DEFAULT : 80
+   -Dcertme_staging    : DEV / PROD.         DEFAULT : DEV
+   -Dcertme_file_name  : Certificate Name.   DEFAULT : app ( followed by _domain-chain.crt )
+   -Dcertme_out_folder : Where the Certificates are generated. DEFAULT folder : certMe
+   -Dcertme_force_gen  : if TRUE, it generate the certificate even if it exists. DEFAULT : false 
+   -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. DEFAULT : FALSE
 ```
 
 4. **Build Step With Tests ( By Default, the tests are skiped ! )**
