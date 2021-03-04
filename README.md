@@ -11,14 +11,6 @@
     cd ../certme/                  ; \
     sudo mvn clean package 
 ```
-1.1 Build Step With Tests ( By Default, the tests aree skiped ! )
-
-```bash
-
-    cd   quarkus-certme-extention/ ; \
-    sudo mvn clean install -Dmaven.test.skip=false
-```
-
 2. Run Step
 
 ```bash
@@ -37,6 +29,14 @@
    -Dcertme_out_folder : Where the Certificates are generated. Default folder : certMe
    -Dcertme_file_name  : Certificate Name.   Default : app ( followed by _domain-chain.crt )
    -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. Default : FALSE
+```
+
+4. Build Step With Tests ( By Default, the tests aree skiped ! )
+
+```bash
+
+    cd   quarkus-certme-extention/ ; \
+    sudo mvn clean install -Dmaven.test.skip=false
 ```
 
 #### Improvements
