@@ -21,7 +21,7 @@
 3. **Supported Arguments :**
 
 ```
-   -Dcertme_domain     : specify the domain. Default : Resolve the Current Domain
+   -Dcertme_domain     : specify the domain. Default : Try to Resolve the Current Domain
    -Dcertme_interface  : Interface.          Default : 0.0.0.0
    -Dcertme_port       : Http Port Server.   Default : 80
    -Dcertme_staging    : DEV / PROD.         Default : DEV
