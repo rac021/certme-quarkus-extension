@@ -8,7 +8,7 @@
 
     cd   quarkus-certme-extention/ ; \
     sudo mvn clean install         ; \
-    cd ../certme/                  ; \
+    cd ../my_project/              ; \
     sudo mvn clean package 
 ```
 2. **Run Step**
