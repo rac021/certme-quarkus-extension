@@ -2,7 +2,7 @@
 
 #### Quarkus Extension for Automatically Generating Let's Encrypt Certificate At Buildtime ( java 11 )
 
-1. Build Step ( need to be sudo in order to user the port 80 )
+1. Build Step ( need to be sudo in order to use the port 80 )
 ```bash
 
     cd   quarkus-certme-extention/ ; \
