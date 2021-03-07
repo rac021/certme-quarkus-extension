@@ -1,6 +1,6 @@
 # certme-quarkus-extension
 
-#### Quarkus Extension for Automatically Generating Let's Encrypt / SelfSigned Certificate At Buildtime ( java 11 )
+#### Quarkus Extension for Automatically Generating Let's Encrypt At Buildtime / SelfSigned Certificate ( java 11 )
 
 1. **Maven Dependecy** : 
 
