@@ -9,6 +9,8 @@ import org.bouncycastle.cert.CertIOException ;
 import java.security.NoSuchAlgorithmException ;
 import java.security.cert.CertificateException ;
 import static org.junit.jupiter.api.Assertions.* ;
+import static org.hamcrest.MatcherAssert.assertThat ;
+import static org.hamcrest.Matchers.equalToIgnoringCase ;
 import org.bouncycastle.operator.OperatorCreationException ;
 
 /**
@@ -34,13 +36,13 @@ public class SelfSignedCertGeneratorTest {
       String x509CertificateToPem = SelfSignedCertGenerator.x509CertificateToPem(cert) ;
       System.out.println( "x509CertificateToPem = " + x509CertificateToPem )           ;
               
-      assertNull(cert.getKeyUsage()                              ) ;
-      assertNull(cert.getExtendedKeyUsage()                      ) ;
-      assertEquals("X.509", cert.getType()                       ) ;
-      assertEquals("CN=localhost", cert.getSubjectDN().getName() ) ;
-      assertEquals(cert.getSubjectDN(), cert.getIssuerDN()       ) ;
-      assertEquals("SHA256withRSA", cert.getSigAlgName()         ) ;
-      assertEquals(3, cert.getVersion()                          ) ;
+      assertNull(   cert.getKeyUsage()                                               ) ;
+      assertNull(   cert.getExtendedKeyUsage()                                       ) ;
+      assertEquals( "X.509"              , cert.getType()                            ) ;
+      assertEquals( "CN=localhost"       , cert.getSubjectDN().getName()             ) ;
+      assertEquals( cert.getSubjectDN()  , cert.getIssuerDN()                        ) ;
+      assertEquals( 3                    , cert.getVersion()                         ) ;
+      assertThat( cert.getSigAlgName()   , equalToIgnoringCase("SHA256withRSA"     ) ) ;
       
     }
 }

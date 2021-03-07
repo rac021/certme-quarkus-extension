@@ -56,14 +56,14 @@ public class CertMeBuildTimeTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "80"                                 ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
         
         System.setProperty( "certme_domain"      , domain     ) ;
         System.setProperty( "certme_out_folder"  , folder     ) ;
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
 
         String expectedMessage = "Cannot issue for \"" + domain + 
                                  "\": Domain name needs at least one dot" ;
@@ -89,7 +89,7 @@ public class CertMeBuildTimeTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "80"                                 ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
         
         System.out.println( "GenCertificates Test " + domain    +
                             " - certme_port : " + port        ) ;
@@ -99,7 +99,7 @@ public class CertMeBuildTimeTest {
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
 
         String expectedMessage1 = "Permission non accordée"     ;
         String expectedMessage2 = "Permission Denied"           ;
@@ -134,7 +134,7 @@ public class CertMeBuildTimeTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "6981"                               ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
        
         System.out.println( "GenCertificates Test google.com "  + 
                             "certme_port : " + port           ) ;
@@ -144,7 +144,7 @@ public class CertMeBuildTimeTest {
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
 
         String expectedMessage = "The ACME server refuses to issue a certificate "         +
                                  "for this domain name, because it is forbidden by policy" ;
@@ -170,7 +170,7 @@ public class CertMeBuildTimeTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "6981"                               ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
         
         System.out.println( "GenCertificates Test www.inria.fr" +
                             " - certme_port : " + port        ) ;
@@ -180,7 +180,7 @@ public class CertMeBuildTimeTest {
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
         
         String expectedMessage = "Challenge failed ( Giving up ) : Invalid response from https://" + 
                                   domain +"/.well-known/acme-challenge/"                           ;
@@ -206,17 +206,17 @@ public class CertMeBuildTimeTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "80"                                 ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
         
         System.out.println( "GenCertificates Test " + domain    +
-                            "- certme_port : " + port         ) ;
+                            "- certme_port : "      + port    ) ;
 
         System.setProperty( "certme_domain"      , domain     ) ;
         System.setProperty( "certme_out_folder"  , folder     ) ;
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
         
         String expectedMessage1 = "Permission non accordée"     ;
         String expectedMessage2 = "Permission Denied"           ;
@@ -251,7 +251,7 @@ public class CertMeBuildTimeTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "80"                                 ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
         String folder    = "certMe"                             ;
         
         System.out.println( "GenCertificates Test " + domain    +
@@ -262,7 +262,7 @@ public class CertMeBuildTimeTest {
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
         
         String dir = System.getProperty("user.dir")             ;
         

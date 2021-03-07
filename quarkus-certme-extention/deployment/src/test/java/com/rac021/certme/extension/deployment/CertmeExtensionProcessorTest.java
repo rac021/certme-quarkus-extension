@@ -9,8 +9,10 @@ import org.jboss.shrinkwrap.api.ShrinkWrap ;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset ;
 import org.jboss.shrinkwrap.api.spec.JavaArchive ;
+import static org.hamcrest.MatcherAssert.assertThat ;
 import com.rac021.quarkus.certme.extention.CertMeRuntime ;
 import org.junit.jupiter.api.extension.RegisterExtension ;
+import static org.hamcrest.CoreMatchers.containsStringIgnoringCase ;
 
 /**
  *
@@ -35,14 +37,14 @@ public class CertmeExtensionProcessorTest {
         String appName   = "app"                                ;
         String interFace = "0.0.0.0"                            ;
         String port      = "6981"                               ;
-        String staging   = "dev"                                ;
+        String env       = "dev"                                ;
         
         System.setProperty( "certme_domain"      , domain     ) ;
         System.setProperty( "certme_out_folder"  , folder     ) ;
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;
-        System.setProperty( "certme_staging"     , staging    ) ;
+        System.setProperty( "certme_env"         , env        ) ;
         // Force Generate Certificates even if it exists
         System.setProperty( "certme_force_gen"   , "true "    ) ;
         
@@ -61,13 +63,13 @@ public class CertmeExtensionProcessorTest {
        
         boolean exist = new File( outCertifFolder ).exists()    ;
         
-        assertFalse( exist )                                    ;
+        assertTrue( exist )                                     ;
         
         String certificateFile = System.getProperty( "quarkus.http.ssl.certificate.file"     ) ;
         String certificateKey  = System.getProperty( "quarkus.http.ssl.certificate.key-file" ) ;
         
-        assertEquals( certificateFile , ""  ) ;
-        assertEquals( certificateKey  , ""  ) ;
+        assertThat( certificateFile , containsStringIgnoringCase("self-SignedCert.crt" ) ) ;
+        assertThat( certificateKey  , containsStringIgnoringCase("self-SignedCert.key" ) ) ;
   }
     
 }

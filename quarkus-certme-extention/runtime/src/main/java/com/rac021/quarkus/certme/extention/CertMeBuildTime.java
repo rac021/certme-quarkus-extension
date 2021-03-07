@@ -74,7 +74,8 @@ public class CertMeBuildTime {
     /** RSA key size of generated key pairs. */
     private static final int KEY_SIZE = 4096  ;
 
-    private static String   STAGING   = "DEV" ;
+    /** ENV = PROD / DEV . */
+    private static String    ENV      = "DEV" ; 
 
     private enum ChallengeType {  HTTP, DNS   }
        
@@ -114,7 +115,7 @@ public class CertMeBuildTime {
        String outCertificateFileName = System.getProperty("certme_file_name")   ;
        String Interface              = System.getProperty("certme_interface")   ;
        String port                   = System.getProperty("certme_port")        ;
-       String staging                = System.getProperty("certme_staging")     ;
+       String env                    = System.getProperty("certme_env")         ;
        String forceGenStr            = System.getProperty("certme_force_gen")   ;
 
        Integer portNum               = 80                                       ;
@@ -125,9 +126,10 @@ public class CertMeBuildTime {
        
        if( Interface == null || Interface.trim().isEmpty()) Interface = "0.0.0.0"       ;
        
-       if(   staging != null          && 
-           ! staging.trim().isEmpty() && 
-             staging.trim().equalsIgnoreCase( "PROD")) { STAGING = "PROD" ; }
+       if(   env != null                               && 
+           ! env.trim().isEmpty()                      && 
+           ( env.trim().equalsIgnoreCase( "PROD")      || 
+             env.trim().equalsIgnoreCase( "PRODUCTION") ) ) { ENV = "PROD" ; }
        
        if ( forceGenStr != null ) forceGen = true           ;
        
@@ -154,7 +156,7 @@ public class CertMeBuildTime {
        LOG.info( "certme_file_name  : [ " + outCertificateFileName + " ] " ) ;
        LOG.info( "certme_interface  : [ " + Interface              + " ] " ) ;
        LOG.info( "certme_port       : [ " + portNum                + " ] " ) ;
-       LOG.info( "certme_staging    : [ " + STAGING                + " ] " ) ;
+       LOG.info( "certme_env        : [ " + env                    + " ] " ) ;
        LOG.info( "certme_force_gen  : [ " + forceGen               + " ] " ) ;
        
        if( new File( outCertificateFolder + outCertificateFileName + "_domain-chain.crt").exists() && 
@@ -259,14 +261,14 @@ public class CertMeBuildTime {
 
         Session session = null ;
         
-        if( STAGING.equalsIgnoreCase("PROD") )             {
+        if( ENV.equalsIgnoreCase("PROD") )                 {
            session = new Session("acme://letsencrypt.org") ;
         }
         else {
            session = new Session("acme://letsencrypt.org/staging") ;
         }
         
-        LOG.warn( "STAGING           : [ " + STAGING  + " ] "    ) ;
+        LOG.warn( "ENV           : [ " + ENV  + " ] "    ) ;
 
         /** Get the Account 
          If there is no account yet, create a new one. */

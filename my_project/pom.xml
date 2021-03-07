@@ -19,7 +19,7 @@
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <certme.version>1.1.10</certme.version>
+        <certme.version>1.6</certme.version>
     </properties>
     
     <dependencyManagement>
