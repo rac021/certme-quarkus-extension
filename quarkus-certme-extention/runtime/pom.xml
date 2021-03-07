@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.github.rac021</groupId>
         <artifactId>certme-quarkus-extension-parent</artifactId>
-        <version>1.6</version>
+        <version>1.7</version>
     </parent>
     
     <artifactId>certme-quarkus-extension</artifactId>

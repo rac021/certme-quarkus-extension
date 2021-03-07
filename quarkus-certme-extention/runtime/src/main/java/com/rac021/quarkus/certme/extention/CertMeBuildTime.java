@@ -20,7 +20,6 @@ import java.nio.file.Files ;
 import java.nio.file.Paths ;
 import java.net.InetAddress ;
 import java.security.KeyPair ;
-import javax.inject.Singleton ;
 import java.security.Security ;
 import org.shredzone.acme4j.Order ;
 import java.net.InetSocketAddress ;
@@ -40,6 +39,7 @@ import org.shredzone.acme4j.util.CSRBuilder ;
 import org.shredzone.acme4j.util.KeyPairUtils ;
 import org.shredzone.acme4j.challenge.Challenge ;
 import io.quarkus.runtime.annotations.ConfigRoot ;
+import javax.enterprise.context.ApplicationScoped ;
 import io.quarkus.runtime.annotations.ConfigPhase ;
 import java.nio.file.attribute.PosixFilePermission ;
 import org.shredzone.acme4j.exception.AcmeException ;
@@ -53,7 +53,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider ;
  * @author ryahiaoui
  */
 
-@Singleton
+@ApplicationScoped
 @ConfigRoot( name = "certme" , phase = ConfigPhase.BUILD_TIME )
 public class CertMeBuildTime {
     
@@ -95,19 +95,19 @@ public class CertMeBuildTime {
        genCertificates()   ;
     }
     
-    public static void genCertificates() throws Exception    {
+    public static void genCertificates() throws Exception      {
 
-       configLogger()                                        ;
+       configLogger()                                          ;
        
-       exception       = null                                ;
+       exception       = null                                  ;
        
-       String ignore   = System.getProperty("certme_ignore") ;
+       String ignore   = System.getProperty("certme_ignore"  ) ;
        
-       if( ignore != null && ! ignore.trim().isEmpty()   )   {
+       if( ignore != null                                    ) {
            
-           LOG.info( "\nCertMe Let's Encrypt Certificate "   +
-                     "Generation IGNORED \n" )               ;
-           return                                            ;
+           LOG.info( "\nCertMe - Let's Encrypt Certificate "   +
+                     "Generation IGNORED " )                   ;
+           return                                              ;
        }
        
        String domain                 = System.getProperty("certme_domain")      ;

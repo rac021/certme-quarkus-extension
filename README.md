@@ -1,8 +1,18 @@
 # certme-quarkus-extension
 
-#### Quarkus Extension for Automatically Generating Let's Encrypt Certificate At Buildtime ( java 11 )
+#### Quarkus Extension for Automatically Generating Let's Encrypt / SelfSigned Certificate At Buildtime ( java 11 )
 
-1. **Build Step ( need to be sudo in order to use the port 80 )**
+1. **Maven Dependecy** : 
+
+```
+   <dependency>
+     <groupId>com.github.rac021</groupId>
+     <artifactId>certme-quarkus-extension</artifactId>
+     <version>1.7</version>
+   </dependency>
+```
+
+2. **Build Step ( for let's Encrypt, need to be sudo in order to use the port 80 )**
 
 ```bash
 
@@ -11,14 +21,14 @@
     cd ../my_project/              ; \
     sudo mvn clean package 
 ```
-2. **Run Step**
+3. **Run Step**
 
 ```bash
 
-    java -jar target/certme-1.0-runner.jar
+    java -jar target/my_project-1.0-runner.jar
 
 ```
-3. **Supported Arguments :**
+4. **Supported Arguments :**
 
 ```
    -Dcertme_domain     : specify the domain. DEFAULT : Try to Resolve the Current Domain
@@ -31,7 +41,7 @@
    -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. DEFAULT : FALSE
 ```
 
-4. **Build Step With Tests ( By Default, the tests are skiped ! )**
+5. **Build Step With Tests ( By Default, the tests are skiped ! )**
 
 ```bash
 

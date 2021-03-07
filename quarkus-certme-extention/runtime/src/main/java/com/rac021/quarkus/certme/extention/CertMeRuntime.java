@@ -10,7 +10,6 @@ import java.io.File ;
 import java.io.FileWriter ;
 import java.io.IOException ;
 import java.security.KeyPair ;
-import javax.inject.Singleton ;
 import org.apache.logging.log4j.Level ;
 import java.security.KeyPairGenerator ;
 import org.apache.commons.io.FileUtils ;
@@ -18,6 +17,7 @@ import org.apache.logging.log4j.Logger ;
 import java.security.cert.X509Certificate ;
 import org.apache.logging.log4j.LogManager ;
 import io.quarkus.runtime.annotations.Recorder ;
+import javax.enterprise.context.ApplicationScoped;
 import org.apache.logging.log4j.core.config.Configurator ;
 
 /**
@@ -25,20 +25,28 @@ import org.apache.logging.log4j.core.config.Configurator ;
  * @author ryahiaoui
  */
 
-@Singleton
 @Recorder
+@ApplicationScoped
 public class CertMeRuntime {
     
     private static final Logger LOG = LogManager.getLogger(CertMeRuntime.class.getName() ) ;
   
-    public void runtimeVerifyCertificates() throws Exception      {
+    public void runtimeVerifyCertificates() throws Exception        {
         
-       Level level = CertMeLogger.checkLog( "INFO" )              ;
-       Configurator.setRootLevel( level )                         ;
-       Configurator.setAllLevels( "certMe_configuration", level ) ;
+       Level level = CertMeLogger.checkLog( "INFO" )                ;
+       Configurator.setRootLevel( level )                           ;
+       Configurator.setAllLevels( "certMe_configuration", level   ) ;
      
+       String ignore   = System.getProperty("certme_ignore"       ) ;
+       
+       if( ignore != null                                         ) {
+           
+         LOG.info( "\nCertMe - Certificate Generation IGNORED \n" ) ;
+         return                                                     ;
+       }
+       
        String outCertificateFolder   = System.getProperty("certme_out_folder")  ;
-       String outCertificateFileName = System.getProperty("certme_file_name")   ;
+       String outCertificateFileName = System.getProperty("certme_file_name" )  ;
            
        String dir = System.getProperty("user.dir") ;
 
@@ -49,7 +57,7 @@ public class CertMeRuntime {
        if (outCertificateFolder == null || outCertificateFolder.trim().isEmpty() ) {
            outCertificateFolder = dir + File.separator + "certMe" + File.separator ;
        }
-       if ( ! outCertificateFolder.trim().endsWith( File.separator ) )  {
+       if ( ! outCertificateFolder.trim().endsWith( File.separator ) )   {
               outCertificateFolder += File.separator ;
        }
        
@@ -74,6 +82,8 @@ public class CertMeRuntime {
        String certFileName    = outCertificateFolder + outCertificateFileName + "_domain-chain.crt" ;
        String certKeyFileName = outCertificateFolder + outCertificateFileName + "_domain.key"       ;
        
+       // If Let's Encrypt Certificate Was Successfully Generated 
+       
        if( new File( certFileName ).exists() &&  new File( certKeyFileName ).exists()  ) {
             
            LOG.info("Certme - Let's Encrypt Certificate Already Exists.. "             ) ;
@@ -85,9 +95,13 @@ public class CertMeRuntime {
            System.setProperty( "quarkus.http.ssl.certificate.key-file", certKeyFileName ) ;
            
        } else {
+           
+           // No Let's Encrypt Certificate 
                
            LOG.warn("Certme - No Let's Encrypt Certificate Found !" )         ;
            
+           // Try tu Generate a SelfSigned Cerficiate 
+
            if ( ! new File(outCertificateFolder).exists()           )         {
                
                FileUtils.forceMkdir( new File(outCertificateFolder) )         ;
@@ -99,11 +113,11 @@ public class CertMeRuntime {
            if ( new File(certFile).exists() && new File(certKeyFile).exists() &&
                 ! forceGen ) {
                
-               LOG.info( "SelfSigned Certificate Already Exists.. "          ) ;
+               LOG.info( "Certme - SelfSigned Certificate Already Exists.. "         ) ;
 
            } else {
                
-               LOG.info( " ++ Generate a SelfSigned Certificate... "                 ) ;
+               LOG.info( "++ Generate a SelfSigned Certificate... "                  ) ;
                
                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA") ;
                keyPairGenerator.initialize( 4096 )                                     ;
