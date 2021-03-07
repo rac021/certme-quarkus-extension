@@ -18,7 +18,7 @@
 
     cd ../my_project/ && sudo mvn clean package 
     
-    # Will Create a CertMe Directory with Let's Encrypt Or SelfSigned Certificate
+    # Will Create a "CertMe" Directory with Let's Encrypt Or SelfSigned Certificate
 
 ```
 3. **Run Step**
