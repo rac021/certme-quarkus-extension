@@ -26,6 +26,8 @@
 ```bash
 
     java -jar target/my_project-1.0-runner.jar
+    
+    Go to : https://localhost:8443/
 
 ```
 4. **Supported Arguments :**
@@ -37,7 +39,7 @@
    -Dcertme_env        : DEV / PROD.         DEFAULT : DEV
    -Dcertme_file_name  : Certificate Name.   DEFAULT : app ( followed by _domain-chain.crt )
    -Dcertme_out_folder : Where the Certificates are generated. DEFAULT folder : certMe
-   -Dcertme_force_gen  : if TRUE, it generate the certificate even if it exists. DEFAULT : false 
+   -Dcertme_force_gen  : if TRUE, it generate the certificate even if it exists. DEFAULT : FALSE 
    -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. DEFAULT : FALSE
 ```
 
