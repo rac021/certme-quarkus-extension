@@ -5,13 +5,40 @@
     <modelVersion>4.0.0</modelVersion>
   
     <parent>
-        <groupId>com.rac021</groupId>
-        <artifactId>certme-extension-parent</artifactId>
-        <version>1.0</version>
+        <groupId>com.github.rac021</groupId>
+        <artifactId>certme-quarkus-extension-parent</artifactId>
+        <version>1.1.10</version>
     </parent>
   
-    <artifactId>certme-extension-deployment</artifactId>
-    <name>Certme Extension - Deployment</name>
+    <artifactId>certme-quarkus-extension-deployment</artifactId>
+    
+    <name>Certme Quarkus Extension - Deployment</name>
+  
+    <description>Certme Quarkus Extension - Deployment</description>
+    
+    <url>https://github.com/rac021/certme-quarkus-extension</url>
+    
+    <developers>
+        <developer>
+            <name>Yahiaoui</name>
+            <url>https://github.com/rac021/</url>
+        </developer>
+    </developers>
+    
+    <scm>
+        <url>https://github.com/rac021/certme-quarkus-extension</url>
+    </scm>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    
+    <packaging>jar</packaging>
   
     <dependencies>
       
@@ -21,8 +48,8 @@
         </dependency>
     
         <dependency>
-            <groupId>com.rac021</groupId>
-            <artifactId>certme-extension</artifactId>
+            <groupId>com.github.rac021</groupId>
+            <artifactId>certme-quarkus-extension</artifactId>
             <version>${project.version}</version>
         </dependency>
     
@@ -34,8 +61,21 @@
 
     </dependencies>
   
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    
     <build>
+        
         <plugins>
+            
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -48,6 +88,64 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <maven.home>${maven.home}</maven.home>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+
         </plugins>
+        
     </build>
 </project>

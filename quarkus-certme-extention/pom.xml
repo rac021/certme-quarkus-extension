@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" 
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rac021</groupId>
-    <artifactId>certme-extension-parent</artifactId>
-    <version>1.0</version>
+    <groupId>com.github.rac021</groupId>
+    <artifactId>certme-quarkus-extension-parent</artifactId>
+    <version>1.1.10</version>
+    
     <packaging>pom</packaging>
-    <name>Certme Extension - Parent</name>
+    
+    <name>Certme Quarkus Extension - Parent</name>
+    
+    <description>Certme Quarkus Extension - Parent</description>
+
+    <!-- Maven Deploy Command : 
+         mvn -DperformRelease=true clean deploy 
+    -->
     
     <modules>
         <module>deployment</module>
         <module>runtime</module>
     </modules>
-    
+
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <failsafe-plugin.version>${surefire-plugin.version}</failsafe-plugin.version>
@@ -27,6 +33,41 @@
         <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
         <maven.test.skip>true</maven.test.skip>
     </properties>
+    
+    <developers>
+        <developer>
+            <name>Yahiaoui</name>
+            <url>https://github.com/rac021/</url>
+        </developer>
+    </developers>
+    
+    <scm>
+        <connection>scm:git:git://github.com/rac021/certme-quarkus-extension.git</connection>
+        <developerConnection>scm:git:ssh://github.com:rac021/certme-quarkus-extension.git</developerConnection>
+        <url>https://github.com/rac021/certme-quarkus-extension</url>
+    </scm>
+    
+    <url>https://github.com/rac021/certme-quarkus-extension</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+        
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     
     <dependencyManagement>
         
@@ -51,39 +92,121 @@
             <plugins>
                 
                 <plugin>
-                    
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire-plugin.version}</version>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <extensions>true</extensions>
                     <configuration>
-                        <systemPropertyVariables>
-                            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                            <maven.home>${maven.home}</maven.home>
-                            <maven.repo>${settings.localRepository}</maven.repo>
-                        </systemPropertyVariables>
+                        <serverId>ossrh</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
                     </configuration>
                 </plugin>
                 
                 <plugin>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${failsafe-plugin.version}</version>
-                    <configuration>
-                        <systemPropertyVariables>
-                            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                            <maven.home>${maven.home}</maven.home>
-                            <maven.repo>${settings.localRepository}</maven.repo>
-                        </systemPropertyVariables>
-                    </configuration>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
-                
+            
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+             
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${compiler-plugin.version}</version>
                 </plugin>
                 
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>3.0.0-M1</version>
+                </plugin>
+
             </plugins>
             
         </pluginManagement>
         
+        <!--
+
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>parent</classifier>
+                            <includes>
+                                <include>*</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+                
+        -->
+        
     </build>
+    
+    <profiles>
+        
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+       
+    </profiles>
     
 </project>

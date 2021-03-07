@@ -647,9 +647,9 @@ public class CertMeBuildTime {
          } ) ;
     }
     
-    /** *    @param domain
-     * @param port
-     * @param interfce
+    /** @param domain
+     *  @param port
+     *  @param interfce
      */
     private static void resolveChallengeAndFetchCert( String domain, int port , String interfce ) {
     
@@ -664,10 +664,6 @@ public class CertMeBuildTime {
         }
     }
     
-     /**
-     * @return String
-     * @throws java.lang.Exception
-    */
     public static String getDomain() throws Exception  {
 
         try (final Socket socket = new Socket())       {

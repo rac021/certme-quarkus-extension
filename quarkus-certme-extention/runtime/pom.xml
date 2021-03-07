@@ -6,14 +6,41 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>com.rac021</groupId>
-        <artifactId>certme-extension-parent</artifactId>
-        <version>1.0</version>
+        <groupId>com.github.rac021</groupId>
+        <artifactId>certme-quarkus-extension-parent</artifactId>
+        <version>1.1.10</version>
     </parent>
     
-    <artifactId>certme-extension</artifactId>
-    <name>Certme Extension - Runtime</name>
+    <artifactId>certme-quarkus-extension</artifactId>
     
+    <name>Certme Quarkus Extension - Runtime</name>
+    
+    <description>Certme Quarkus Extension - Runtime</description>
+    
+    <url>https://github.com/rac021/certme-quarkus-extension</url>
+    
+    <developers>
+        <developer>
+            <name>Yahiaoui</name>
+            <url>https://github.com/rac021/</url>
+        </developer>
+    </developers>
+    
+    <scm>
+        <url>https://github.com/rac021/certme-quarkus-extension</url>
+    </scm>
+    
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    
+    <packaging>jar</packaging>
+
     <dependencies>
        
         <dependency>
@@ -58,10 +85,21 @@
 
     </dependencies>
     
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+    
     <build>
         
         <plugins>
-            
+           
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-bootstrap-maven-plugin</artifactId>
@@ -75,6 +113,45 @@
                         <configuration>
                             <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -103,8 +180,46 @@
                 </configuration>
             </plugin>
             
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0-M1</version>
+            </plugin>
+            
         </plugins>
         
     </build>
+    
+    <profiles>
+        
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+       
+    </profiles>
     
 </project>
