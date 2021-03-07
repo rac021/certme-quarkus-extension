@@ -16,10 +16,8 @@
 
 ```bash
 
-    cd   quarkus-certme-extention/ ; \
-    sudo mvn clean install         ; \
-    cd ../my_project/              ; \
-    sudo mvn clean package 
+    cd ../my_project/ && sudo mvn clean package 
+
 ```
 3. **Run Step**
 
