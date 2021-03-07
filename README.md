@@ -37,7 +37,7 @@
    -Dcertme_interface  : Interface.          DEFAULT : 0.0.0.0
    -Dcertme_port       : Http Port Server.   DEFAULT : 80
    -Dcertme_env        : DEV / PROD.         DEFAULT : DEV
-   -Dcertme_file_name  : Certificate Name.   DEFAULT : app ( followed by _domain-chain.crt )
+   -Dcertme_file_name  : Certificate Name.   DEFAULT : "app" ( followed by "_domain-chain.crt" )
    -Dcertme_out_folder : Where the Certificates are generated. DEFAULT folder : certMe
    -Dcertme_force_gen  : if TRUE, it generate the certificate even if it exists. DEFAULT : FALSE 
    -Dcertme_ignore     : if TRUE, Certificate Generation will be ignored. DEFAULT : FALSE
