@@ -2,6 +2,7 @@
 package com.rac021.quarkus.certme.extention ;
 
 import java.io.File ;
+import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
 import org.junit.jupiter.api.Order ;
 import org.junit.jupiter.api.AfterAll ;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.AfterEach ;
 import org.junit.jupiter.api.BeforeAll ;
 import org.apache.commons.io.FileUtils ;
 import org.junit.jupiter.api.BeforeEach ;
+import io.quarkus.test.junit.QuarkusTest ;
 import org.junit.jupiter.api.TestMethodOrder ;
 import static org.hamcrest.MatcherAssert.assertThat ;
 import static org.hamcrest.CoreMatchers.containsString ;
@@ -22,13 +24,22 @@ import static org.hamcrest.CoreMatchers.containsStringIgnoringCase ;
  * @author ryahiaoui
  */
 
+@QuarkusTest
 @TestMethodOrder(OrderAnnotation.class)
 public class CertMeBuildTimeTest {
 
+    private static final Logger LOG = Logger.getLogger( CertMeBuildTimeTest.class.getName() ) ;
+  
     public CertMeBuildTimeTest() { }
 
     @BeforeAll
-    public static void setUpClass()    { }
+    public static void setUpClass()    { 
+
+       LOG.info( " "                                 ) ;
+       LOG.info( "================================ " ) ;
+       LOG.info( "CertMe - CertMeBuildTimeTest     " ) ;
+       LOG.info( "================================ " ) ;
+    }
     
     @AfterAll
     public static void tearDownClass() { }
@@ -48,8 +59,8 @@ public class CertMeBuildTimeTest {
     @Order(1)
     public void testGenCertificatesLocalHost80Fail() throws Exception {
 
-        System.out.println( "\nGenCertificates Test Localhost - " + 
-                            "certme_port : 80"                  ) ;
+        LOG.info( "\nGenCertificates Test Localhost - "       + 
+                   "certme_port : 80"                         ) ;
 
         String domain    = "localhost"                          ;
         String folder    = "certMe"                             ;

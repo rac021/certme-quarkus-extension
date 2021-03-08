@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.github.rac021</groupId>
         <artifactId>certme-quarkus-extension-parent</artifactId>
-        <version>1.7</version>
+        <version>1.8</version>
     </parent>
     
     <artifactId>certme-quarkus-extension</artifactId>
@@ -49,25 +49,13 @@
         </dependency>
      
         <dependency>
-            <groupId>org.shredzone.acme4j</groupId>
-            <artifactId>acme4j-utils</artifactId>
-            <version>2.11</version>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web</artifactId>
         </dependency>
-      
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.14.0</version>
-        </dependency>
-        
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-web</artifactId>
         </dependency>
        
         <dependency>
@@ -82,7 +70,13 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
-
+        
+        <dependency>
+            <groupId>org.shredzone.acme4j</groupId>
+            <artifactId>acme4j-utils</artifactId>
+            <version>2.11</version>
+        </dependency>
+    
     </dependencies>
     
     <distributionManagement>
@@ -166,17 +160,6 @@
                             <version>${quarkus.version}</version>
                         </path>
                     </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                        <maven.home>${maven.home}</maven.home>
-                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             

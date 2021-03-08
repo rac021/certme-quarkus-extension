@@ -21,6 +21,7 @@ import java.nio.file.Paths ;
 import java.net.InetAddress ;
 import java.security.KeyPair ;
 import java.security.Security ;
+import org.jboss.logging.Logger ;
 import org.shredzone.acme4j.Order ;
 import java.net.InetSocketAddress ;
 import org.shredzone.acme4j.Login ;
@@ -28,12 +29,9 @@ import org.shredzone.acme4j.Status ;
 import org.shredzone.acme4j.Session ;
 import org.shredzone.acme4j.Account ;
 import java.util.concurrent.TimeUnit ;
-import org.apache.logging.log4j.Level ;
-import org.apache.logging.log4j.Logger ;
 import org.apache.commons.io.FileUtils ;
 import org.shredzone.acme4j.Certificate ;
 import org.shredzone.acme4j.Authorization ;
-import org.apache.logging.log4j.LogManager ;
 import org.shredzone.acme4j.AccountBuilder ;
 import org.shredzone.acme4j.util.CSRBuilder ;
 import org.shredzone.acme4j.util.KeyPairUtils ;
@@ -45,7 +43,6 @@ import java.nio.file.attribute.PosixFilePermission ;
 import org.shredzone.acme4j.exception.AcmeException ;
 import org.shredzone.acme4j.challenge.Dns01Challenge ;
 import org.shredzone.acme4j.challenge.Http01Challenge ;
-import org.apache.logging.log4j.core.config.Configurator ;
 import org.bouncycastle.jce.provider.BouncyCastleProvider ;
 
 /**
@@ -72,7 +69,7 @@ public class CertMeBuildTime {
     private static  File DOMAIN_CHAIN_FILE    ;
 
     /** RSA key size of generated key pairs. */
-    private static final int KEY_SIZE = 4096  ;
+    public static final int KEY_SIZE = 4096   ;
 
     /** ENV = PROD / DEV . */
     private static String    ENV      = "DEV" ; 
@@ -82,7 +79,7 @@ public class CertMeBuildTime {
     /** Challenge type to be used. */
     private static final ChallengeType CHALLENGE_TYPE = ChallengeType.HTTP   ;
   
-    private static final Logger LOG = LogManager.getLogger(CertMeBuildTime.class.getName() ) ;
+    private static final Logger LOG = Logger.getLogger( CertMeBuildTime.class.getName() ) ;
  
     private static boolean      forceGen  = false ;
     
@@ -92,13 +89,17 @@ public class CertMeBuildTime {
             
     public CertMeBuildTime() throws Exception     {
        
+       LOG.info( " CertMe - Constructor ( BuildTime ) "                       ) ;
+       LOG.info( " "                                                          ) ;
+       LOG.info( "######################################################### " ) ;
+       LOG.info( "CertMe - Let's Encrypt / SelfSigned Certificate Generator " ) ;
+       LOG.info( "######################################################### " ) ;
+       
        genCertificates()   ;
     }
     
     public static void genCertificates() throws Exception      {
 
-       configLogger()                                          ;
-       
        exception       = null                                  ;
        
        String ignore   = System.getProperty("certme_ignore"  ) ;
@@ -147,17 +148,18 @@ public class CertMeBuildTime {
               outCertificateFolder += File.separator ;
        }
        
-       FileUtils.deleteQuietly( new File(outCertificateFolder) ) ;
-       FileUtils.forceMkdir(    new File(outCertificateFolder) ) ;
+       FileUtils.deleteQuietly( new File(outCertificateFolder)   ) ;
+       FileUtils.forceMkdir(    new File(outCertificateFolder)   ) ;
        
-       LOG.info( "Java Version      : [ " + jVersion               + " ] " ) ;
-       LOG.info( "certme_domain     : [ " + domain                 + " ] " ) ;
-       LOG.info( "certme_out_folder : [ " + outCertificateFolder   + " ] " ) ;
-       LOG.info( "certme_file_name  : [ " + outCertificateFileName + " ] " ) ;
-       LOG.info( "certme_interface  : [ " + Interface              + " ] " ) ;
-       LOG.info( "certme_port       : [ " + portNum                + " ] " ) ;
-       LOG.info( "certme_env        : [ " + env                    + " ] " ) ;
-       LOG.info( "certme_force_gen  : [ " + forceGen               + " ] " ) ;
+       System.out.println( " "                                   ) ;
+       LOG.info( "Java Version      : " + jVersion               ) ;
+       LOG.info( "certme_domain     : " + domain                 ) ;
+       LOG.info( "certme_out_folder : " + outCertificateFolder   ) ;
+       LOG.info( "certme_file_name  : " + outCertificateFileName ) ;
+       LOG.info( "certme_interface  : " + Interface              ) ;
+       LOG.info( "certme_port       : " + portNum                ) ;
+       LOG.info( "certme_env        : " + ENV                    ) ;
+       LOG.info( "certme_force_gen  : " + forceGen               ) ;
        
        if( new File( outCertificateFolder + outCertificateFileName + "_domain-chain.crt").exists() && 
            new File( outCertificateFolder + outCertificateFileName + "_domain.key").exists()       &&
@@ -185,12 +187,10 @@ public class CertMeBuildTime {
 
            if ( server != null  ) server.stop()                                 ;
             
-            LOG.error( "\n" )                                                   ;
-            LOG.error( "Certme Failed to get a certificate for the domain [[ "  + 
+            LOG.warn( "Certme Failed to get a certificate for the domain [[ "   + 
                        domain + " ]] \n " +  ex.getMessage() + "\n"           ) ;
             
             FileUtils.deleteQuietly( new File(outCertificateFolder )          ) ;
-
        }
     }
     
@@ -226,7 +226,7 @@ public class CertMeBuildTime {
                 new File( outCertificateFolder + outCertificateFileName + "_domain.key").exists()   )     {
 
                 LOG.info("Certme Cert Generation Success ! " )                                            ;
-                System.getProperty("quarkus.http.ssl.certificate.file"    , 
+                System.getProperty("quarkus.http.ssl.certificate.file"     , 
                                     outCertificateFolder +  outCertificateFileName + "_domain-chain.crt") ;
                 System.setProperty( "quarkus.http.ssl.certificate.key-file",
                                      outCertificateFolder + outCertificateFileName + "_domain.key"      ) ;
@@ -255,7 +255,7 @@ public class CertMeBuildTime {
      */
     private static void fetchCertificate( String domain , int port, String interfce ) throws Exception {
         
-        LOG.info( "Fetch Certificates.... " )             ; 
+        LOG.info( "Fetch Certificates.... " )              ; 
         /** Load the user key file. If there is no key file, create a new one. */
         KeyPair userKeyPair = loadOrCreateUserKeyPair()    ;
 
@@ -268,8 +268,6 @@ public class CertMeBuildTime {
            session = new Session("acme://letsencrypt.org/staging") ;
         }
         
-        LOG.warn( "ENV           : [ " + ENV  + " ] "    ) ;
-
         /** Get the Account 
          If there is no account yet, create a new one. */
         Account acct = findOrRegisterAccount(session, userKeyPair) ;
@@ -356,11 +354,11 @@ public class CertMeBuildTime {
      *
      * @return User's {@link KeyPair}.
      */
-    private static KeyPair loadOrCreateUserKeyPair( ) throws IOException {
+    private static KeyPair loadOrCreateUserKeyPair( ) throws IOException   {
 
-        if ( (USER_KEY_FILE_COPY).exists() )                      {
-           LOG.info( "KEY_USER Already Exists. Path : "           + 
-                      USER_KEY_FILE_COPY.getAbsolutePath() )      ;
+        if ( (USER_KEY_FILE_COPY).exists() )                               {
+           LOG.info( "Let's Encrypt USER_KEY Already Exists "   )          ;
+           LOG.info( "=> Path : " + USER_KEY_FILE_COPY.getAbsolutePath() ) ;
            
            FileUtils.copyFile(USER_KEY_FILE_COPY, USER_KEY_FILE ) ;
         }
@@ -690,11 +688,5 @@ public class CertMeBuildTime {
     public static Exception getException() {
         return exception ;
     }
-    
-    private static void configLogger()     {
-       
-        Level level = CertMeLogger.checkLog( "INFO"  )             ;
-        Configurator.setRootLevel( level   )                       ;
-        Configurator.setAllLevels( "certMe_configuration", level ) ;
-    }
+
 }

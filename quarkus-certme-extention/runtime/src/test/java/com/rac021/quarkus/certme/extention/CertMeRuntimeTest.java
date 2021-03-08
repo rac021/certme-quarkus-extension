@@ -2,6 +2,7 @@
 package com.rac021.quarkus.certme.extention ;
 
 import java.io.File ;
+import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
 import org.junit.jupiter.api.Order ;
 import org.junit.jupiter.api.AfterAll ;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.AfterEach ;
 import org.junit.jupiter.api.BeforeAll ;
 import org.apache.commons.io.FileUtils ;
 import org.junit.jupiter.api.BeforeEach ;
+import io.quarkus.test.junit.QuarkusTest ;
 import org.junit.jupiter.api.MethodOrderer ;
 import org.junit.jupiter.api.TestMethodOrder ;
 import static org.junit.jupiter.api.Assertions.* ;
@@ -19,13 +21,22 @@ import static org.hamcrest.CoreMatchers.containsStringIgnoringCase ;
  *
  * @author ryahiaoui
  */
+@QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CertMeRuntimeTest {
-    
+  
+    private static final Logger LOG = Logger.getLogger( CertMeRuntimeTest.class.getName() ) ;
+  
     public CertMeRuntimeTest() { }
     
     @BeforeAll
-    public static void setUpClass()    { }
+    public static void setUpClass() { 
+    
+       LOG.info( " "                                 ) ;
+       LOG.info( "================================ " ) ;
+       LOG.info( "CertMe - CertMeBuildTimeTest     " ) ;
+       LOG.info( "================================ " ) ;
+    }
     
     @AfterAll
     public static void tearDownClass() { }

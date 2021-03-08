@@ -2,8 +2,12 @@
 package com.rac021.quarkus.certme.extention ;
 
 import java.security.KeyPair ;
+import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
+import org.junit.jupiter.api.Order ;
 import java.security.KeyPairGenerator ;
+import org.junit.jupiter.api.BeforeAll ;
+import io.quarkus.test.junit.QuarkusTest ;
 import java.security.cert.X509Certificate ;
 import org.bouncycastle.cert.CertIOException ;
 import java.security.NoSuchAlgorithmException ;
@@ -17,12 +21,24 @@ import org.bouncycastle.operator.OperatorCreationException ;
  *
  * @author ryahiaoui
  */
+@QuarkusTest
 public class SelfSignedCertGeneratorTest {
     
-    public SelfSignedCertGeneratorTest() {
+    private static final Logger LOG = Logger.getLogger( CertMeBuildTimeTest.class.getName() ) ;
+  
+    public SelfSignedCertGeneratorTest() { }
+   
+    @BeforeAll
+    public static void setUpClass() {
+        
+       LOG.info( " "                                      ) ;
+       LOG.info( "===================================== " ) ;
+       LOG.info( "CertMe - SelfSignedCertGeneratorTest  " ) ;
+       LOG.info( "===================================== " ) ;
     }
     
     @Test
+    @Order(8)
     public void createSelfSignedCertificate() throws CertificateException     , CertIOException          ,
                                                      OperatorCreationException, NoSuchAlgorithmException , 
                                                      Exception                {

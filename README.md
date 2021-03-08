@@ -9,7 +9,7 @@
    <dependency>
      <groupId>com.github.rac021</groupId>
      <artifactId>certme-quarkus-extension</artifactId>
-     <version>1.7</version>
+     <version>1.8</version>
    </dependency>
 ```
 
@@ -26,7 +26,7 @@
 
 ```bash
 
-    java -jar target/my_project-1.0-runner.jar
+    java -jar target/quarkus-app/quarkus-run.jar
     
     Go to : https://localhost:8443/
 

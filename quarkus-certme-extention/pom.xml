@@ -4,7 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.rac021</groupId>
     <artifactId>certme-quarkus-extension-parent</artifactId>
-    <version>1.7</version>
+    
+    <version>1.8</version>
     
     <packaging>pom</packaging>
     
@@ -141,39 +142,22 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.0.0-M1</version>
                 </plugin>
+                
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire-plugin.version}</version>
+                    <configuration>
+                        <systemPropertyVariables>
+                            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager> 
+                            <quarkus.log.level>INFO</quarkus.log.level>  
+                            <maven.home>${maven.home}</maven.home>
+                        </systemPropertyVariables>
+                    </configuration>
+                </plugin>
 
             </plugins>
             
         </pluginManagement>
-        
-        <!--
-
-        <plugins>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <classifier>parent</classifier>
-                            <includes>
-                                <include>*</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-        </plugins>
-                
-        -->
         
     </build>
     

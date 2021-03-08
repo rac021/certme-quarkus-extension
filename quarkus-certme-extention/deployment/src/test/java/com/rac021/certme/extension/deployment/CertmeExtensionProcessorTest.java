@@ -2,23 +2,30 @@
 package com.rac021.certme.extension.deployment ;
 
 import java.io.File ;
+import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
+import org.junit.jupiter.api.Order ;
 import org.apache.commons.io.FileUtils ;
+import org.junit.jupiter.api.BeforeAll ;
 import io.quarkus.test.QuarkusUnitTest ;
+import io.quarkus.test.junit.QuarkusTest ;
 import org.jboss.shrinkwrap.api.ShrinkWrap ;
 import static org.junit.jupiter.api.Assertions.* ;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset ;
 import org.jboss.shrinkwrap.api.spec.JavaArchive ;
 import static org.hamcrest.MatcherAssert.assertThat ;
-import com.rac021.quarkus.certme.extention.CertMeRuntime ;
 import org.junit.jupiter.api.extension.RegisterExtension ;
+import com.rac021.quarkus.certme.extention.CertMeRuntime ;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase ;
 
 /**
  *
  * @author ryahiaoui
  */
+@QuarkusTest
 public class CertmeExtensionProcessorTest {
+    
+  private static final Logger LOG = Logger.getLogger( CertmeExtensionProcessorTest.class.getName() ) ;
     
   @RegisterExtension                                                                  
   static final QuarkusUnitTest config = new QuarkusUnitTest().setArchiveProducer(() ->
@@ -27,10 +34,21 @@ public class CertmeExtensionProcessorTest {
                                         .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
   ) ;
 
+  @BeforeAll
+  public static void setUpClass() { 
+    
+       LOG.info( " "                                      ) ;
+       LOG.info( "===================================== " ) ;
+       LOG.info( "CertMe - CertmeExtensionProcessorTest " ) ;
+       LOG.info( "===================================== " ) ;
+  }
+  
   @Test
-  public void testDeployementFailedGenCertif() throws Exception    {
-
-        System.out.println( "\nTest CertMe Extension Deployment" ) ;
+  @Order(10)
+  public void testDeployementFailedGenCertif() throws Exception {
+      
+        LOG.info( "Test CertMe localhost.com : 6981  "          +
+                  " ( testDeployementFailedGenCertif ) " )      ;
         
         String domain    = "localhost.com"                      ;
         String folder    = "certMe"                             ;

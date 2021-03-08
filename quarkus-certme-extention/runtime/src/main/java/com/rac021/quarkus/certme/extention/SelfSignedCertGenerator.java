@@ -56,12 +56,8 @@ public class SelfSignedCertGenerator {
    * @param days validity period in days of the certificate
    *
    * @return self-signed X509Certificate
-   *
-   * @throws OperatorCreationException on creating a key id
-   * @throws CertIOException on building JcaContentSignerBuilder
    * @throws CertificateException on getting certificate from provider
    */
-  
   public static X509Certificate generate(final KeyPair keyPair       ,
                                          final String  hashAlgorithm ,
                                          final String  cn            ,
@@ -83,11 +79,11 @@ public class SelfSignedCertGenerator {
                                        notBefore                              ,
                                        notAfter                               ,
                                        x500Name                               ,
-                                       keyPair.getPublic()).addExtension(Extension.subjectKeyIdentifier  , false, createSubjectKeyId(keyPair.getPublic()))
-                                                           .addExtension(Extension.authorityKeyIdentifier, false, createAuthorityKeyId(keyPair.getPublic()))
-                                                           .addExtension(Extension.basicConstraints, true, new BasicConstraints(true) ) ;
+                                       keyPair.getPublic()).addExtension(Extension.subjectKeyIdentifier  , false , createSubjectKeyId(keyPair.getPublic()))
+                                                           .addExtension(Extension.authorityKeyIdentifier, false , createAuthorityKeyId(keyPair.getPublic()))
+                                                           .addExtension(Extension.basicConstraints      , true  , new BasicConstraints(true)             ) ;
 
-    return new JcaX509CertificateConverter().setProvider(new BouncyCastleProvider()).getCertificate(certificateBuilder.build(contentSigner));
+    return new JcaX509CertificateConverter().setProvider(new BouncyCastleProvider()).getCertificate(certificateBuilder.build(contentSigner) )               ;
   }
 
   /**

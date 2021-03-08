@@ -3,8 +3,7 @@ package com.rac021.quarkus.certme.extention ;
 
 import io.vertx.core.Vertx ;
 import io.vertx.ext.web.Router ;
-import org.apache.logging.log4j.Logger ;
-import org.apache.logging.log4j.LogManager ;
+import org.jboss.logging.Logger ;
 import io.vertx.core.http.HttpServerResponse ;
 import org.shredzone.acme4j.challenge.Http01Challenge ;
 
@@ -13,15 +12,15 @@ import org.shredzone.acme4j.challenge.Http01Challenge ;
  * @author ryahiaoui
  */
 
-public class VertxServer      {
+public class VertxServer            {
 
-  private Vertx     vertx     ;
+  private Vertx          vertx      ;
   
-  private Throwable exception ; 
+  private Throwable      exception  ; 
   
-  private static final   Logger LOG = LogManager.getLogger( VertxServer.class.getName() ) ;
+  private static final   Logger LOG = Logger.getLogger( VertxServer.class.getName() ) ;
  
-  private static boolean isStarted  = false ;
+  private static boolean isStarted  = false                                           ;
   
   public VertxServer( String host, int port, Http01Challenge challenge ) {
    
@@ -29,7 +28,7 @@ public class VertxServer      {
       
        if ( challenge == null ) throw new RuntimeException("Http01Challenge can't be null         ") ;
    
-       run( port, host, challenge )        ;
+       run( port, host, challenge )                                      ;
   }
 
   private void run( int port, String host , Http01Challenge challenge )  {
@@ -39,7 +38,7 @@ public class VertxServer      {
       vertx = Vertx.vertx() ;
       
       // 1: Create a router object.
-      Router router = Router.router(vertx) ;
+      Router router = Router.router( vertx ) ;
       
       // 2: Create a route and the associated response
       router.route("/.well-known/acme-challenge/" + challenge.getToken() ).handler(routingContext -> {
