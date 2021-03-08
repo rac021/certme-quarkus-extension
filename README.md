@@ -41,8 +41,8 @@
    -Dcertme_file_name  : Certificate Name.   DEFAULT : "app" ( followed by "_domain-chain.crt" )
    -Dcertme_out_folder : Where the Certificates are generated. DEFAULT folder : certMe   
    -Dcertme_ignore     : if TRUE, CertMe will be ignored at Build / Runtime. DEFAULT : FALSE
-   -Dcertme_force_gen  : if TRUE, it generate a new Certificate at Build / Runtime 
-                         even if it exists. DEFAULT : FALSE 
+   -Dcertme_force_gen  : if TRUE, CertMe will generate a new Certificate at Build / Runtime 
+                         even if it exists . DEFAULT : FALSE 
 ```
 
 5. **Build Step With Tests ( By Default, the tests are skiped ! )**
