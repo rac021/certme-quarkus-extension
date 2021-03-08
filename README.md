@@ -15,7 +15,7 @@
 
 2. **Build Step ( for let's Encrypt, need to be sudo in order to use the port 80 )**
 
-      - For Modifying the Port use : -Dcertme_port=PortNumber 
+      - For Modifying the Port, use : -Dcertme_port=PortNumber 
       - If not SUDO, the Certificate Generation will FAIL at Buidtime
 
 ```bash
