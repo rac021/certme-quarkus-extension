@@ -48,8 +48,7 @@
 
 ```bash
 
-    cd   quarkus-certme-extention/ ; \
-    sudo mvn clean install -Dmaven.test.skip=false
+    cd   quarkus-certme-extention/ && sudo mvn clean install -Dmaven.test.skip=false
 ```
 
 #### Improvements
