@@ -17,7 +17,7 @@
 
 ```bash
 
-    cd ../my_project/ && sudo mvn clean package 
+    cd ../my_quarkus_project/ && sudo mvn clean package 
     
     # Will Create a "CertMe" Directory with Let's Encrypt Or SelfSigned Certificate
 
@@ -28,7 +28,7 @@
 
     java -jar target/quarkus-app/quarkus-run.jar
     
-    Go to : https://localhost:8443/
+    Go to : https://localhost:8443/hello
 
 ```
 4. **Supported Arguments :**
