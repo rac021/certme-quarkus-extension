@@ -14,7 +14,8 @@
 ```
 
 2. **Build Step ( for let's Encrypt, need to be sudo in order to use the port 80 )**
-
+      - For Modifying the Port use : -Dcertme_port=PortNumber 
+      - If not SUDO, the Certificate Generation will FAIL at Buidtime
 ```bash
 
     cd ../my_quarkus_project/ && sudo mvn clean package 
@@ -23,7 +24,7 @@
 
 ```
 3. **Run Step**
-
+      - If No Let's Encrypt Certificate found in the Folder "certMe", a self-Signed Certificate will be Generated
 ```bash
 
     java -jar target/quarkus-app/quarkus-run.jar
