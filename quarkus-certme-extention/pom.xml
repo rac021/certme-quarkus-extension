@@ -5,7 +5,7 @@
     <groupId>com.github.rac021</groupId>
     <artifactId>certme-quarkus-extension-parent</artifactId>
     
-    <version>1.8</version>
+    <version>1.9</version>
     
     <packaging>pom</packaging>
     

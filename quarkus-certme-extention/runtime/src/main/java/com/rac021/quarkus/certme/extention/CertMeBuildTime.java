@@ -190,6 +190,8 @@ public class CertMeBuildTime {
             LOG.warn( "Certme Failed to get a certificate for the domain [[ "   + 
                        domain + " ]] \n " +  ex.getMessage() + "\n"           ) ;
             
+            LOG.info( "A SelfSigned Certificate Will be Generated At Runtime ") ;
+            
             FileUtils.deleteQuietly( new File(outCertificateFolder )          ) ;
        }
     }
