@@ -17,6 +17,7 @@
 
       - For Modifying the Port, use : -Dcertme_port=PortNumber 
       - If not SUDO, the Certificate Generation will FAIL at Buidtime
+      - If the Certificate Generation FAILED at Buidtime, a self-Signed Certif will be Generated at Runtime
 
 ```bash
 
