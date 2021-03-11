@@ -10,7 +10,6 @@ import io.vertx.core.Vertx ;
 import io.vertx.ext.web.Router ;
 import org.jboss.logging.Logger ;
 import org.wildfly.common.Assert ;
-import javax.enterprise.context.Dependent ;
 import io.vertx.core.http.HttpServerResponse ;
 
 /**
@@ -18,7 +17,6 @@ import io.vertx.core.http.HttpServerResponse ;
  * @author ryahiaoui
  */
 
-@Dependent
 public class VertxServer                                                       {
 
   private final String  ACME_CHALLENGE_PREFIX = "/.well-known/acme-challenge/" ;
