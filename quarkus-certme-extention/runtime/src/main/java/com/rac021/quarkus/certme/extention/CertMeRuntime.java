@@ -77,9 +77,9 @@ public class CertMeRuntime      {
        
        // If Let's Encrypt Certificate Was Successfully Generated 
        
-       if( new File( certFileName ).exists() &&  new File( certKeyFileName ).exists()  ) {
+       if( new File( certFileName ).exists() &&  new File( certKeyFileName ).exists()   ) {
             
-           LOG.info("Certme - Let's Encrypt Certificate Already Exists.. "             ) ;
+           LOG.info("Certme - Let's Encrypt Certificate Already Exists.. "              ) ;
 
            LOG.info( " => Domain-chain : " + certFileName      ) ;
            LOG.info( " => Domain-ckey  : " + certKeyFileName   ) ;
@@ -115,13 +115,13 @@ public class CertMeRuntime      {
                KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA") ;
                KeyPair keyPair = keyPairGenerator.generateKeyPair()                    ;
                
-               final X509Certificate cert = SelfSignedCertGenerator.generate( keyPair         , 
-                                                                              "SHA256withRSA" , 
-                                                                              "localhost"     ,
-                                                                              365           ) ;
+               final X509Certificate cert = SelfSignedCertGenerator.generate( keyPair            ,
+                                                                              "SHA256withRSA"    , 
+                                                                              "localhost"        ,
+                                                                              config.CERTIF_DAYS ) ;
 
-               writeToFile( certFile    , CertifUtils.x509CertificateToPem( cert   ) ) ;
-               writeToFile( certKeyFile , CertifUtils.getPrivateKeyAsString(keyPair) ) ;
+               writeToFile( certFile    , CertifUtils.x509CertificateToPem(  cert   ) ) ;
+               writeToFile( certKeyFile , CertifUtils.getPrivateKeyAsString( keyPair) ) ;
            }
            
            if ( new File(certFile).exists() && new File(certKeyFile).exists() ) {

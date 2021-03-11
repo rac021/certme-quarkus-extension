@@ -30,7 +30,6 @@ public class VertxServer                                                       {
   private Throwable     exception          ; 
   
   private boolean       isStarted  = false ;
-
   
   public VertxServer( String host , int port ,String token , String athorization ) {
    
@@ -81,7 +80,6 @@ public class VertxServer                                                       {
          isStarted = false                    ;
          vertx.close()                        ;
     }
-    
   }
   
   public Throwable getException() {

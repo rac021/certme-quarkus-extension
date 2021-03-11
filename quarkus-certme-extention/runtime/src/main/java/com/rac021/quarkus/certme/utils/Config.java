@@ -21,6 +21,9 @@ public class Config   {
    private final String KEY_FORCE_GEN     = "certme_force_gen"    ;
    private final String KEY_ENV           = "certme_env"          ; 
    private final String KEY_TERMS_AGREED  = "certme_terms_agreed" ; 
+   private final String KEY_KEY_SIZE      = "certme_key_size"     ; 
+   private final String KEY_CONTACT       = "certme_contact"      ; 
+   private final String KEY_CERTIF_DAYS   = "certme_days"         ; 
 
    public final Integer HTTP_PORT_CHALLENGE        ;
 
@@ -36,13 +39,19 @@ public class Config   {
    
    public final String  CERTIF_KEY_FILE_NAME       ;
    
-   public final String  CERTIF_USER_KEY_FILE_NAME  ;
+   public final String  USER_KEY_FILE_NAME         ;
    
    public final Boolean FORCE_GEN                  ;
    
    public final String  ENV                        ;
    
    public final boolean TERMS_OF_SERVICE_AGREED    ;
+   
+   public final int     KEY_SIZE                   ;
+
+   public final int     CERTIF_DAYS                ;
+   
+   public final String  CONTACT                    ;
    
    public Config() throws Exception {
       
@@ -54,15 +63,15 @@ public class Config   {
      this.IGNORE                     = ( getOrDefault( KEY_IGNORE       , false      ) )              ; 
      this.CERTIF_FILE_NAME           = ( getOrDefault( KEY_CERTIF_NAME  , "app.crt"  ) )              ;
      this.CERTIF_KEY_FILE_NAME       = ( getOrDefault( KEY_CERTIF_KEY   , "app.key"  ) )              ;
-     this.CERTIF_USER_KEY_FILE_NAME  = ( getOrDefault( KEY_USER_KEY     , "user.key" ) )              ;
+     this.USER_KEY_FILE_NAME         = ( getOrDefault( KEY_USER_KEY     , "user.key" ) )              ;
      this.FORCE_GEN                  = ( getOrDefault( KEY_FORCE_GEN    , false      ) )              ;
-     
      this.ENV                        = ( getOrDefault( KEY_ENV          , "DEV"      ) )              ;
-     
      this.TERMS_OF_SERVICE_AGREED    = ( getOrDefault( KEY_TERMS_AGREED ,  true      ) )              ;
-     
-     this.FOLDER                     = ( getOrDefault( KEY_FOLDER      ,  dir + File.separator       +
-                                                                          ".certMe" + File.separator ) ) ;
+     this.CONTACT                    = ( getOrDefault( KEY_CONTACT      ,  null      ) )              ;
+     this.KEY_SIZE                   = ( getOrDefault( KEY_KEY_SIZE     ,  2048      ) )              ;
+     this.CERTIF_DAYS                = ( getOrDefault( KEY_CERTIF_DAYS  ,  365       ) )              ;
+     this.FOLDER                     = ( getOrDefault( KEY_FOLDER       ,  dir      + File.separator  +
+                                                                          ".certMe" + File.separator  ) ) ;
      
      if ( ! this.FOLDER.trim().endsWith( File.separator )) this.FOLDER += File.separator ;
 
@@ -82,5 +91,12 @@ public class Config   {
 
     private Integer toInt( String value ) {
       return Integer.parseInt( value)     ;
+    }
+
+    private int getOrDefault( String key, int defValue )  {
+        String value = System.getProperty( key ) ;
+       return value != null && 
+            ! value.trim().isEmpty() ? 
+              Integer.parseInt( value.trim() ) : defValue ;
     }
 }
