@@ -1,5 +1,5 @@
 
-package com.rac021.quarkus.certme.extention ;
+package com.rac021.quarkus.certme.utils ;
 
 /**
  *
@@ -7,11 +7,8 @@ package com.rac021.quarkus.certme.extention ;
  */
 
 import java.util.Date ;
-import java.util.Base64 ;
 import java.time.Instant ;
 import java.time.Duration ;
-import java.io.IOException ;
-import java.io.StringWriter ;
 import java.math.BigInteger ;
 import java.security.KeyPair ;
 import java.security.PublicKey ;
@@ -24,7 +21,6 @@ import org.bouncycastle.operator.ContentSigner ;
 import org.bouncycastle.cert.X509ExtensionUtils ;
 import org.bouncycastle.operator.DigestCalculator ;
 import org.bouncycastle.asn1.x509.BasicConstraints ;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter ;
 import org.bouncycastle.asn1.oiw.OIWObjectIdentifiers ;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier ;
 import org.bouncycastle.cert.X509v3CertificateBuilder ;
@@ -56,12 +52,14 @@ public class SelfSignedCertGenerator {
    * @param days validity period in days of the certificate
    *
    * @return self-signed X509Certificate
+     * @throws org.bouncycastle.operator.OperatorCreationException
    * @throws CertificateException on getting certificate from provider
+     * @throws org.bouncycastle.cert.CertIOException
    */
-  public static X509Certificate generate(final KeyPair keyPair       ,
-                                         final String  hashAlgorithm ,
-                                         final String  cn            ,
-                                         final int     days          )
+  public static X509Certificate generate( final KeyPair keyPair       ,
+                                          final String  hashAlgorithm ,
+                                          final String  cn            ,
+                                          final int     days          )
 
     throws OperatorCreationException, CertificateException, CertIOException {
       
@@ -120,24 +118,6 @@ public class SelfSignedCertGenerator {
     final DigestCalculator digCalc =  new BcDigestCalculatorProvider().get(new AlgorithmIdentifier(OIWObjectIdentifiers.idSHA1) ) ;
 
     return new X509ExtensionUtils(digCalc).createAuthorityKeyIdentifier( publicKeyInfo ) ;
-  }
- 
-  
-  public static String x509CertificateToPem(final X509Certificate cert) throws IOException {
-
-    final StringWriter writer   = new StringWriter()        ;
-    try (JcaPEMWriter pemWriter = new JcaPEMWriter(writer)) {
-          pemWriter.writeObject(cert) ;
-          pemWriter.flush()           ;
-    }
-    return writer.toString()          ;
-  }
-  
-  public static String getPrivateKeyAsString( final KeyPair keyPair) throws IOException {
-      
-    return "-----BEGIN PRIVATE KEY-----\n"                                       +
-           Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded()) + 
-           "\n-----END PRIVATE KEY-----\n"                                       ;
   }
   
 }

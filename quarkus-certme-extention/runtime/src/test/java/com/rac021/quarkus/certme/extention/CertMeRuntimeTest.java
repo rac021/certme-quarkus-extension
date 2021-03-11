@@ -4,7 +4,6 @@ package com.rac021.quarkus.certme.extention ;
 import java.io.File ;
 import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
-import org.junit.jupiter.api.Order ;
 import org.junit.jupiter.api.AfterAll ;
 import org.junit.jupiter.api.AfterEach ;
 import org.junit.jupiter.api.BeforeAll ;
@@ -52,7 +51,6 @@ public class CertMeRuntimeTest {
      * @throws java.lang.Exception
      */
     @Test
-    @Order(7)
     public void testRuntimeVerifyCertificates() throws Exception {
         
         System.out.println( "\nRuntimeVerifyCertificates Test" ) ;

@@ -4,7 +4,6 @@ package com.rac021.quarkus.certme.extention ;
 import java.security.KeyPair ;
 import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
-import org.junit.jupiter.api.Order ;
 import java.security.KeyPairGenerator ;
 import org.junit.jupiter.api.BeforeAll ;
 import io.quarkus.test.junit.QuarkusTest ;
@@ -16,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.* ;
 import static org.hamcrest.MatcherAssert.assertThat ;
 import static org.hamcrest.Matchers.equalToIgnoringCase ;
 import org.bouncycastle.operator.OperatorCreationException ;
+import com.rac021.quarkus.certme.utils.SelfSignedCertGenerator ;
+import static com.rac021.quarkus.certme.utils.CertifUtils.x509CertificateToPem ;
 
 /**
  *
@@ -38,7 +39,6 @@ public class SelfSignedCertGeneratorTest {
     }
     
     @Test
-    @Order(8)
     public void createSelfSignedCertificate() throws CertificateException     , CertIOException          ,
                                                      OperatorCreationException, NoSuchAlgorithmException , 
                                                      Exception                {
@@ -49,7 +49,7 @@ public class SelfSignedCertGeneratorTest {
       
       final X509Certificate cert = SelfSignedCertGenerator.generate(keyPair, "SHA256withRSA", "localhost", 730 ) ;
   
-      String x509CertificateToPem = SelfSignedCertGenerator.x509CertificateToPem(cert) ;
+      String x509CertificateToPem = x509CertificateToPem(cert)                         ;
       System.out.println( "x509CertificateToPem = " + x509CertificateToPem )           ;
               
       assertNull(   cert.getKeyUsage()                                               ) ;

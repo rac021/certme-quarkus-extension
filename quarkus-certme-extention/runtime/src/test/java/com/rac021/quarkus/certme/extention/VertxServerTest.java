@@ -3,7 +3,6 @@ package com.rac021.quarkus.certme.extention ;
 
 import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
-import org.junit.jupiter.api.Order ;
 import org.junit.jupiter.api.AfterAll ;
 import org.junit.jupiter.api.AfterEach ;
 import org.junit.jupiter.api.BeforeAll ;
@@ -12,6 +11,7 @@ import io.quarkus.test.junit.QuarkusTest ;
 import org.junit.jupiter.api.MethodOrderer ;
 import org.junit.jupiter.api.TestMethodOrder ;
 import static org.junit.jupiter.api.Assertions.* ;
+import com.rac021.quarkus.certme.utils.VertxServer ;
 
 /**
  *
@@ -47,14 +47,13 @@ public class VertxServerTest {
      * Test of getException method, of class VertxServer.
      */
     @Test
-    @Order(9)
     public void testGetException() {
         
         LOG.info( "Http Server Vert.x Exception Test" ) ;
         
         RuntimeException assertThrows = assertThrows( RuntimeException.class, () -> {
          
-             VertxServer vertxServer = new VertxServer( null, 80, null   ) ;
+             VertxServer vertxServer = new VertxServer( null, 80, null, null      ) ;
             
         } ) ;
         
