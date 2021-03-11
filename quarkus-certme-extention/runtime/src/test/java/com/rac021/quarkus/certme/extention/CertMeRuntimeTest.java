@@ -10,8 +10,6 @@ import org.junit.jupiter.api.BeforeAll ;
 import org.apache.commons.io.FileUtils ;
 import org.junit.jupiter.api.BeforeEach ;
 import io.quarkus.test.junit.QuarkusTest ;
-import org.junit.jupiter.api.MethodOrderer ;
-import org.junit.jupiter.api.TestMethodOrder ;
 import static org.junit.jupiter.api.Assertions.* ;
 import static org.hamcrest.MatcherAssert.assertThat ;
 import static org.hamcrest.CoreMatchers.containsStringIgnoringCase ;
@@ -21,7 +19,6 @@ import static org.hamcrest.CoreMatchers.containsStringIgnoringCase ;
  * @author ryahiaoui
  */
 @QuarkusTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CertMeRuntimeTest {
   
     private static final Logger LOG = Logger.getLogger( CertMeRuntimeTest.class.getName() ) ;
@@ -63,7 +60,7 @@ public class CertMeRuntimeTest {
         String env       = "dev"                                 ;
          
         System.setProperty( "certme_domain"      , domain      ) ;
-        System.setProperty( "certme_out_folder"  , folder      ) ;
+        System.setProperty( "certme_folder"      , folder      ) ;
         System.setProperty( "certme_file_name"   , appName     ) ;
         System.setProperty( "certme_interface"   , interFace   ) ;
         System.setProperty( "certme_port"        , port        ) ;

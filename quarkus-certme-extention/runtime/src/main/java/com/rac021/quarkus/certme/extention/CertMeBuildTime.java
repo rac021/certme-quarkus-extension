@@ -40,6 +40,8 @@ public class CertMeBuildTime {
 
     private final Config        CONFIG      ;
 
+    static Exception            exception   ; 
+    
     public CertMeBuildTime() throws Exception                         {
 
         LOG.info( "Trying to Generate Let's Encrypt Certificate.." )  ;
@@ -128,9 +130,10 @@ public class CertMeBuildTime {
             writeToFile( userKeyPath   , CertifUtils.getPrivateKeyAsString( userKey    ) ) ;
             
         } catch( IllegalArgumentException | AcmeException ex ) {
+            this.exception = ex           ;
             LOG.warn(ex.getMessage() )    ;
             LOG.info( " A Self-Signed Certificate Will Be Generated At Runtime " ) ;
         }
-        
     }
+    
 }

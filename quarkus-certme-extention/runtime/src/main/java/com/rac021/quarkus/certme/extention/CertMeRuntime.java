@@ -18,6 +18,7 @@ import javax.enterprise.context.ApplicationScoped ;
 import com.rac021.quarkus.certme.utils.CertifUtils ;
 import com.rac021.quarkus.certme.utils.SelfSignedCertGenerator ;
 import static com.rac021.quarkus.certme.utils.CertifUtils.writeToFile ;
+import org.wildfly.common.Assert;
 
 /**
  *

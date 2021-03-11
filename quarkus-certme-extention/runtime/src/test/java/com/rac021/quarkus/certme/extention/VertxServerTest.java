@@ -8,8 +8,6 @@ import org.junit.jupiter.api.AfterEach ;
 import org.junit.jupiter.api.BeforeAll ;
 import org.junit.jupiter.api.BeforeEach ;
 import io.quarkus.test.junit.QuarkusTest ;
-import org.junit.jupiter.api.MethodOrderer ;
-import org.junit.jupiter.api.TestMethodOrder ;
 import static org.junit.jupiter.api.Assertions.* ;
 import com.rac021.quarkus.certme.utils.VertxServer ;
 
@@ -18,7 +16,6 @@ import com.rac021.quarkus.certme.utils.VertxServer ;
  * @author ryahiaoui
  */
 @QuarkusTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class VertxServerTest {
     
     private static final Logger LOG = Logger.getLogger( VertxServerTest.class.getName() ) ;

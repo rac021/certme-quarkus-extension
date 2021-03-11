@@ -4,7 +4,6 @@ package com.rac021.certme.extension.deployment ;
 import java.io.File ;
 import org.jboss.logging.Logger ;
 import org.junit.jupiter.api.Test ;
-import org.junit.jupiter.api.Order ;
 import org.apache.commons.io.FileUtils ;
 import org.junit.jupiter.api.BeforeAll ;
 import io.quarkus.test.QuarkusUnitTest ;
@@ -44,7 +43,6 @@ public class CertmeExtensionProcessorTest {
   }
   
   @Test
-  @Order(10)
   public void testDeployementFailedGenCertif() throws Exception {
       
         LOG.info( "Test CertMe localhost.com : 6981  "          +
@@ -58,7 +56,7 @@ public class CertmeExtensionProcessorTest {
         String env       = "dev"                                ;
         
         System.setProperty( "certme_domain"      , domain     ) ;
-        System.setProperty( "certme_out_folder"  , folder     ) ;
+        System.setProperty( "certme_folder"      , folder     ) ;
         System.setProperty( "certme_file_name"   , appName    ) ;
         System.setProperty( "certme_interface"   , interFace  ) ;
         System.setProperty( "certme_port"        , port       ) ;

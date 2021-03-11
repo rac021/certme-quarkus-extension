@@ -49,7 +49,7 @@ public class AcmeClient extends AcmeClientSpi  {
         String token            = selectedChallenge.getToken()                     ;
         String keyAuthorization = selectedChallenge.getKeyAuthorization( account ) ;
         
-        vertxServer = new VertxServer( config.HTTP_ADRESS_CHALLENGE , 
+        vertxServer = new VertxServer( config.BINDING_INTERFACE     , 
                                        config.HTTP_PORT_CHALLENGE   , 
                                        token                        , 
                                        keyAuthorization           ) ;
