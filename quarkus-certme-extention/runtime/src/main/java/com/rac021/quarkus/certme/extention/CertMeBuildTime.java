@@ -75,8 +75,8 @@ public class CertMeBuildTime {
             
             FileUtils.forceMkdir( new File( CONFIG.FOLDER ) ) ;
             
-            String certifPath    = CONFIG.FOLDER + CONFIG.CERTIF_FILE_NAME             ; 
-            String certifKeyPath = CONFIG.FOLDER + CONFIG.CERTIF_KEY_FILE_NAME         ;
+            String certifPath    = CONFIG.FOLDER  + CONFIG.CERTIF_FILE_NAME            ; 
+            String certifKeyPath = CONFIG.FOLDER  + CONFIG.CERTIF_KEY_FILE_NAME        ;
             
             if ( new File(certifPath).exists()    ) new File(certifPath).delete()      ;
             if ( new File(certifKeyPath).exists() ) new File(certifKeyPath).delete()   ;
