@@ -9,9 +9,9 @@ import java.security.cert.X509Certificate ;
 import com.rac021.quarkus.certme.utils.Config ;
 import io.quarkus.runtime.annotations.ConfigRoot ;
 import com.rac021.quarkus.certme.utils.AcmeClient ;
-import com.rac021.quarkus.certme.utils.CertifUtils;
 import io.quarkus.runtime.annotations.ConfigPhase ;
 import javax.enterprise.context.ApplicationScoped ;
+import com.rac021.quarkus.certme.utils.CertifUtils ;
 import org.wildfly.security.x500.cert.acme.AcmeAccount ;
 import org.wildfly.security.x500.cert.acme.AcmeException ;
 import static com.rac021.quarkus.certme.utils.CertifUtils.writeToFile ;
@@ -66,17 +66,17 @@ public class CertMeBuildTime {
 
             }
 
-            X509CertificateChainAndSigningKey certAndSigningKey = ACME_CLIENT.obtainCertificateChain( acmeAccount , 
-                                                                                                      staging     , 
+            X509CertificateChainAndSigningKey certAndSigningKey = ACME_CLIENT.obtainCertificateChain( acmeAccount    , 
+                                                                                                      staging        , 
                                                                                                       CONFIG.DOMAIN  ) ;
 
-            X509Certificate[] certificate = certAndSigningKey.getCertificateChain() ;
-            PrivateKey        privateKey  = certAndSigningKey.getSigningKey()       ;
+            X509Certificate[] certificate = certAndSigningKey.getCertificateChain()    ;
+            PrivateKey        privateKey  = certAndSigningKey.getSigningKey()          ;
             
             FileUtils.forceMkdir( new File( CONFIG.FOLDER ) ) ;
             
-            String certifPath    = CONFIG.FOLDER + CONFIG.CERTIF_FILE_NAME      ; 
-            String certifKeyPath = CONFIG.FOLDER + CONFIG.CERTIF_KEY_FILE_NAME  ; 
+            String certifPath    = CONFIG.FOLDER + CONFIG.CERTIF_FILE_NAME             ; 
+            String certifKeyPath = CONFIG.FOLDER + CONFIG.CERTIF_KEY_FILE_NAME         ;
             
             if ( new File(certifPath).exists()    ) new File(certifPath).delete()      ;
             if ( new File(certifKeyPath).exists() ) new File(certifKeyPath).delete()   ;

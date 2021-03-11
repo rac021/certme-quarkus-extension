@@ -56,7 +56,7 @@ public class CertMeRuntime      {
        
        if ( config.FORCE_GEN )  {
        
-           // Force to Gen Certificates at CertMeRuntime
+           // Force to Gen Certificates at Runtime
            // Because the Let's Encrypt http challenge must be resolved on the port 80
            // You have to be root in order to be able to start server on this port
            
@@ -120,11 +120,8 @@ public class CertMeRuntime      {
                                                                               "localhost"     ,
                                                                               365           ) ;
 
-               String x509Cert = CertifUtils.x509CertificateToPem( cert )     ;
-               String Certkey  = CertifUtils.getPrivateKeyAsString(keyPair)   ;
-
-               writeToFile( certFile    , x509Cert ) ;
-               writeToFile( certKeyFile , Certkey  ) ;
+               writeToFile( certFile    , CertifUtils.x509CertificateToPem( cert   ) ) ;
+               writeToFile( certKeyFile , CertifUtils.getPrivateKeyAsString(keyPair) ) ;
            }
            
            if ( new File(certFile).exists() && new File(certKeyFile).exists() ) {
